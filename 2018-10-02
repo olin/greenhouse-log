@@ -1,0 +1,12 @@
+# 2018-10-09: Meeting with WGBH
+Matt Brucker, Evan New-Schmidt
+
+## Meeting WGBH
+
+This semester, our project is framed around bringing new uses to WGBH's archival content. Up to this point, we have a basic working prototype, and we've tested out the experience in the somewhat-related balloon experiment. Now, we want to meet with folks at the WGBH archives to discuss the direction we're taking moving forward.
+
+### Meeting Takeaways
+
+In our meeting, we discussed our current status, the current and future technical setup, and our potential directions for experiences and what hurdles existed in creating those experience. Specifically, we talked about our setup for the WGBH Alumni Weekend - content shoudl be displayed on a number of channels (potentially 6), with some supporting signage. Our ideas for metadata, e.g. displaying in-browser or having a "TV guide" of sorts, are optional but would be nice to have. We also floated the idea of creating a full "living room" experience in order to draw in people at the event. 
+
+Overall, we identified our steps moving forward: get multiple channels working, create a cohesive experience that will work at the WGBH Alumni Weekend, add other features as we explore and determine potential extra things to add on. 
