@@ -5,5 +5,42 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    width: 50%;
+}
+
+.container {
+    position: relative;
+    height: 1200px;
+}
+
+.stack-image1 {
+    position: absolute;
+    width: 100%;
+    top: 0px;
+}
+
+.stack-image2 {
+    position: absolute;
+    width: 100%;
+    top: 320px;
+}
+
+.stack-image3 {
+    position: absolute;
+    width: 100%;
+    top: 305px;
+    left: 2px;
+}
+
+.move-down {
+    transition: all 0.2s ease;
+    .container:hover & {
+        transform: translateY(30px);
+    }
+}
+
+.move-down-far {
+    transition: all 0.2s ease;
+    .container:hover & {
+        transform: translateY(100px);
+    }
 }
