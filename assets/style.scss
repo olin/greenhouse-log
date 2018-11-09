@@ -27,6 +27,9 @@ h1 {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    // TODO: refactor margin spacing into a separate content style or similar
+    margin-top: 15px;
+    margin-bottom: 15px;
 }
 
 .center-title {
