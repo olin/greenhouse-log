@@ -1,9 +1,21 @@
 ---
-layout: post
-title: The Balloon
+layout: page
+title: The Greenhouse
 ---
 
-### The Greenhouse
+<br><marquee>WELCOME!</marquee><br>
 
-Welcome!
+_Please excuse the mess while we get ourselves situated..._
 
+<!--
+
+  __________________________
+< Welcome to the Bear Cave >
+ --------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+
+ -->
