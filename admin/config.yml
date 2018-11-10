@@ -1,0 +1,19 @@
+publish_mode: editorial_workflow
+media_folder: "assets"
+display_url: https://greenhouse.olin.build
+logo_url: https://greenhouse.olin.build/assets/LivingRoom.png
+
+backend:
+  name: github
+  repo: olin/greenhouse-log
+  branch: netlify-cms
+
+collections:
+  - name: posts
+    label: posts
+    folder: _posts/
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Layout", name: "layout", widget: "hidden", default: "post"}
+      - {label: "Title", name: "title", widget: "string"}
