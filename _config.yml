@@ -32,6 +32,20 @@ collections:
     output: true
     permalink: /projects/:title/
 
+# custom list for profiles
+people:
+  - name: Jeff Goldenson
+    description:
+    image:
+  - name: Matt Brucker
+    description:
+    image:
+    website: https://mbrucker.com/
+  - name: Evan Lloyd New-Schmidt
+    description:
+    image:
+    website: https://evan.new-schmidt.com/
+
 # Build settings
 markdown: kramdown
 theme: minima
