@@ -1,0 +1,16 @@
+<ul class="project-list">
+{%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+  {%- for project in site.projects -%}
+  <li>
+  {%- if project.date -%}
+  <span class="project-meta">{{ project.date | date: date_format }}</span>
+  {%- endif -%}
+  <h3>
+      <a class="project-link" href="{{ project.url | relative_url }}">
+      {{ project.title | escape }}
+      </a>
+  </h3>
+  {{ project.excerpt }}
+  </li>
+  {%- endfor -%}
+</ul>

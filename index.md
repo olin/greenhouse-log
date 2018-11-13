@@ -7,15 +7,8 @@ title: The Greenhouse
 
 _Please excuse the mess while we get ourselves situated..._
 
-<!--
+## What We Do
 
-  __________________________
-< Welcome to the Bear Cave >
- --------------------------
-        \   ^__^
-         \  (oo)\_______
-            (__)\       )\/\
-                ||----w |
-                ||     ||
-
- -->
+<div>
+{%- include project-list.html -%}
+</div>

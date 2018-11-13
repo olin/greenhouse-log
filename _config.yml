@@ -26,6 +26,12 @@ github_username:  jekyll
 
 permalink: /:title
 
+# https://jekyllrb.com/docs/collections/
+collections:
+  projects:
+    output: true
+    permalink: /projects/:title/
+
 # Build settings
 markdown: kramdown
 theme: minima
