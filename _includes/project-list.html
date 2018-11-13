@@ -10,7 +10,11 @@
       {{ project.title | escape }}
       </a>
   </h3>
+  {%- if project.summary -%}
+  {{ project.summary }}
+  {%- else -%}
   {{ project.excerpt }}
+  {%- endif -%}
   </li>
   {%- endfor -%}
 </ul>
