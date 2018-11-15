@@ -4,31 +4,38 @@ layout: default
 
 <div class="home">
   {%- if page.title -%}
-    <h1 class="page-heading">{{ page.title }}</h1>
+  <h1 class="page-heading">{{ page.title }}</h1>
   {%- endif -%}
 
   {{ content }}
 
-  {%- if site.posts.size > 0 -%}
-    <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
-    <ul class="post-list">
-      {%- for post in site.posts -%}
-      <li>
-        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-        <span class="post-meta">{{ post.date | date: date_format }}</span>
-        <h3>
-          <a class="post-link" href="{{ post.url | relative_url }}">
-            {{ post.title | escape }}
-          </a>
-        </h3>
-        {%- if site.show_excerpts -%}
-          {{ post.excerpt }}
-        {%- endif -%}
-      </li>
-      {%- endfor -%}
-    </ul>
+  <h2>What We've Done</h2>
+  {%- include project-list.html -%}
 
-    <p class="rss-subscribe">subscribe <a href="{{ "/feed.xml" | relative_url }}">via RSS</a></p>
-  {%- endif -%}
+  <h2>Who We Are</h2>
+  <div class="team">
+    {% for member in site.people %}
+    <article>
+      <img class="headshot" src="{{ site.baseurl }}/assets/{{ member.image }}" alt=""/>
+      <div class="content">
+        <h3>{{ member.name }}</h3>
+        <h4><i>{{ member.role }}</i></h4>
+        <div class="links">
+          {% if member.website %}
+          <a href="{{ member.website }}" target="_blank">
+            <span class="fas fa-globe-americas"></span>
+          </a>
+          {% endif %}
+          {% if member.email %}
+          <a href="mailto:{{ member.email }}" target="_blank">
+            <span class="fa-envelope fas"></span>
+          </a>
+          {% endif %}
+        </div>
+        <p>{{ member.description }}</p>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
 
 </div>
