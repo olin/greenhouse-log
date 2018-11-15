@@ -33,16 +33,20 @@ collections:
 # custom list for profiles
 people:
   - name: Jeff Goldenson
-    description:
-    image:
+    role: Director
+    image: jeffgoldenson.jpg
   - name: Matt Brucker
-    description:
-    image:
+    role: Student
     website: https://mbrucker.com/
-  - name: Evan Lloyd New-Schmidt
-    description:
-    image:
+    image: face.jpg
+  - name: Evan New-Schmidt
+    role: Student
     website: https://evan.new-schmidt.com/
+    image: new-schmidt_evan.jpg
+  - name: You
+    role: Student
+    image: you.png
+
 
 # Build settings
 markdown: kramdown
