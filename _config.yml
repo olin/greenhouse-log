@@ -30,6 +30,8 @@ collections:
     output: true
     permalink: /projects/:title/
 
+google_analytics: UA-129883476-1
+
 # custom list for profiles
 people:
   - name: Jeff Goldenson
