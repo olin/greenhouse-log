@@ -38,4 +38,13 @@ layout: default
     {% endfor %}
   </div>
 
+  {% if site.data.links.size > 0 %}
+  <h2>What We Like</h2>
+    <ul class="links">
+      {% for link in site.data.links %}
+      <li><a href="{{ link }}">{{ link }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
 </div>
