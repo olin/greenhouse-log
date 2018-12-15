@@ -9,6 +9,14 @@ layout: default
 
   {{ content }}
 
+  {% if site.data.whiteboard.size > 0 %}
+    {% assign sortedLinks = site.data.whiteboard | sort: 'date' %}
+    <h2>What We're Up To</h2>
+    <img class="center-image" src={{sortedLinks.last.src}} />
+    <p><i>Updated {{sortedLinks.last.date}}</i></p>
+    <p>Curious about what we're up to? Our whiteboard is captured periodically and updated here. Take a look to see what we're thinking about.</p>
+  {% endif %}
+
   <h2>What We've Done</h2>
   {%- include project-list.html -%}
 
@@ -37,5 +45,14 @@ layout: default
     </article>
     {% endfor %}
   </div>
+
+  {% if site.data.links.size > 0 %}
+  <h2>What We Like</h2>
+    <ul class="links">
+      {% for link in site.data.links %}
+      <li><a href="{{ link }}">{{ link }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
 
 </div>
