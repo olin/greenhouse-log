@@ -1,58 +1,101 @@
----
-layout: default
----
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
 
-<div class="home">
-  {%- if page.title -%}
-  <h1 class="page-heading">{{ page.title }}</h1>
-  {%- endif -%}
+{%- include head.html -%}
 
-  {{ content }}
+<link rel="stylesheet" href="/assets/main-style.css">
 
-  {% if site.data.whiteboard.size > 0 %}
-    {% assign sortedLinks = site.data.whiteboard | sort: 'date' %}
-    <h2>What We're Up To</h2>
-    <img class="center-image" src={{sortedLinks.last.src}} />
-    <p><i>Updated {{ sortedLinks.last.date | date: "%x %X %Z"}}</i></p>
-    <p>Curious about what we're up to? Our whiteboard is captured periodically and updated here. Take a look to see what we're thinking about.</p>
-  {% endif %}
+<body>
 
-  <h2>What We've Done</h2>
-  {%- include project-list.html -%}
+  <!-- {%- include header.html -%} -->
 
-  <h2>Who We Are</h2>
-  <div class="team">
-    {% for member in site.people %}
-    <article>
-      <img class="headshot" src="{{ site.baseurl }}/assets/{{ member.image }}" alt=""/>
-      <div class="content">
-        <h3>{{ member.name }}</h3>
-        <h4><i>{{ member.role }}</i></h4>
-        <div class="links">
-          {% if member.website %}
-          <a href="{{ member.website }}" target="_blank">
-            <span class="fas fa-globe-americas"></span>
-          </a>
-          {% endif %}
-          {% if member.email %}
-          <a href="mailto:{{ member.email }}" target="_blank">
-            <span class="fa-envelope fas"></span>
-          </a>
-          {% endif %}
-        </div>
-        <p>{{ member.description }}</p>
-      </div>
-    </article>
-    {% endfor %}
+  <div id="wall">
+    <img id="whiteboard" src="/assets/whiteboard_example.jpeg"/>
+    <div id="left"></div>
+    <div id="right"></div>
+    <div id="hint-wrapper">
+    <a id="hint" href="#content">
+      <p>
+        <i>Psst! There's more down here!</i>
+      </p>
+    </a>
+  </div>
   </div>
 
-  {% if site.data.links.size > 0 %}
-  <h2>What We Like</h2>
-    <ul class="links">
-      {% for link in site.data.links %}
-      <li><a href="{{ link }}">{{ link }}</a></li>
-      {% endfor %}
-    </ul>
-  {% endif %}
+  <main id='content' class="page-content" aria-label="Content">
+    <div class="wrapper">
+      <div class="home">
+        {%- if page.title -%}
+        <h1 class="page-heading">{{ page.title }}</h1>
+        {%- endif -%}
 
-</div>
+        {{ content }}
+
+        {% if site.data.whiteboard.size > 0 %}
+        {% assign sortedLinks = site.data.whiteboard | sort: 'date' %}
+        <h2>What We're Up To</h2>
+        <img class="center-image" src={{sortedLinks.last.src}} />
+        <p><i>Updated {{ sortedLinks.last.date | date: "%x %X %Z"}}</i></p>
+        <p>Curious about what we're up to? Our whiteboard is captured periodically and updated here. Take a look to see
+          what we're thinking about.</p>
+        {% endif %}
+
+        <h2>What We've Done</h2>
+        {%- include project-list.html -%}
+
+        <h2>Who We Are</h2>
+        <div class="team">
+          {% for member in site.people %}
+          <article>
+            <img class="headshot" src="{{ site.baseurl }}/assets/{{ member.image }}" alt="" />
+            <div class="content">
+              <h3>{{ member.name }}</h3>
+              <h4><i>{{ member.role }}</i></h4>
+              <div class="links">
+                {% if member.website %}
+                <a href="{{ member.website }}" target="_blank">
+                  <span class="fas fa-globe-americas"></span>
+                </a>
+                {% endif %}
+                {% if member.email %}
+                <a href="mailto:{{ member.email }}" target="_blank">
+                  <span class="fa-envelope fas"></span>
+                </a>
+                {% endif %}
+              </div>
+              <p>{{ member.description }}</p>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+
+        {% if site.data.links.size > 0 %}
+        <h2>What We Like</h2>
+        <ul class="links">
+          {% for link in site.data.links %}
+          <li><a href="{{ link }}">{{ link }}</a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- {%- include footer.html -%} -->
+
+</body>
+
+<!--
+ __________________________
+< Welcome to the Bear Cave >
+ --------------------------
+        \   ^__^
+         \  (oo)\_______
+            (__)\       )\/\
+                ||----w |
+                ||     ||
+ -->
+
+</html>
