@@ -100,12 +100,12 @@ body {
     }
   }
 
-  // @media (max-aspect-ratio: 16/12) {
-  //   #wall {
-  //     max-height: calc(100vw / 16 * 9);
-  //   }
-  //   #hint {
-  //     visibility: hidden;
-  //   }
-  // }
+  @media (max-aspect-ratio: 16/10) {
+    #wall {
+      max-height: calc(100vw / 16 * 9);
+    }
+    #hint {
+      visibility: hidden;
+    }
+  }
 }
