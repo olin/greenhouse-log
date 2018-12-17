@@ -27,11 +27,11 @@ body {
 
 
     #whiteboard {
-      border-color: #777;
-      border-style: solid;
-      border-width: 4px 1px 6px;
-      max-width: calc(100% - 2px*2);
-      max-height: calc(100% - 5px*2);
+      // border-color: #777;
+      // border-style: solid;
+      // border-width: 4px 1px 6px;
+      max-width: 100%;
+      max-height: 100%;
       margin: auto;
       grid-column: 2;
       grid-row: wb-top / wb-bottom;
