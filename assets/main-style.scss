@@ -39,14 +39,16 @@ body {
 
     #left {
       margin-right: 20%;
-      background-color: red;
+      height: 100%;
+      // background-color: red;
       grid-column: 1;
       grid-row: wb-top / floor;
     }
-
+    
     #right {
       margin-left: 20%;
-      background-color: blue;
+      height: 100%;
+      // background-color: blue;
       grid-column: 3;
       grid-row: doorframe / floor;
     }
