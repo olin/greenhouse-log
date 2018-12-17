@@ -12,7 +12,7 @@ body {
   #wall {
     height: 100vh;
     min-height: calc(100vw / 16 * 7);
-    max-height: calc(100vw / 16 * 12);  // overridden on >16/10 screens
+    max-height: calc(100vw / 16 * 10);  // overridden on >16/10 screens
     width: 100%;
     position: relative;
 
@@ -91,12 +91,12 @@ body {
     }
   }
 
-  @media (max-aspect-ratio: 16/12) {
-    #wall {
-      max-height: calc(100vw / 16 * 9);
-    }
-    #hint {
-      visibility: hidden;
-    }
-  }
+  // @media (max-aspect-ratio: 16/12) {
+  //   #wall {
+  //     max-height: calc(100vw / 16 * 9);
+  //   }
+  //   #hint {
+  //     visibility: hidden;
+  //   }
+  // }
 }
