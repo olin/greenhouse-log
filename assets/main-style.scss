@@ -24,8 +24,6 @@ body {
     grid-template-rows: [ceiling] auto [doorframe] calc(1 / 16 * 100vw) [wb-top] calc(3 / 16 * 100vw) [wb-bottom] calc(3 / 16 * 100vw) [floor];
     grid-template-columns: 25% 50% 25%;
 
-
-
     #whiteboard {
       // border-color: #777;
       // border-style: solid;
@@ -60,6 +58,15 @@ body {
       // background-color: blue;
       grid-column: 3;
       grid-row: doorframe / floor;
+    }
+
+    #upper {
+      grid-column: 1 / 4;
+      grid-row: ceiling / wb-top;
+      width: 100%;
+      overflow: hidden;
+      position: absolute;
+      bottom: 0;
     }
 
     #hint-wrapper {
