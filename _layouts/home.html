@@ -10,7 +10,14 @@
   <!-- {%- include header.html -%} -->
 
   <div id="wall">
-    <img id="whiteboard" src="/assets/whiteboard_example.jpeg"/>
+    {% assign sortedLinks = site.data.whiteboard | sort: 'date' %}
+    <div id="whiteboard">
+      <img id="whiteboard" src="{{sortedLinks.last.src}}"/>
+      <i>
+        <p>Curious about what we're up to?</p>
+        <p>Our whiteboard is captured periodically and updated here.</p>
+      </i>
+    </div>
     <img id="left" src="/assets/shelves.svg"></img>
     <img id="right" src="/assets/door.svg"></img>
     <div id="hint-wrapper">
@@ -30,15 +37,6 @@
         {%- endif -%}
 
         {{ content }}
-
-        {% if site.data.whiteboard.size > 0 %}
-        {% assign sortedLinks = site.data.whiteboard | sort: 'date' %}
-        <h2>What We're Up To</h2>
-        <img class="center-image" src={{sortedLinks.last.src}} />
-        <p><i>Updated {{ sortedLinks.last.date | date: "%x %X %Z"}}</i></p>
-        <p>Curious about what we're up to? Our whiteboard is captured periodically and updated here. Take a look to see
-          what we're thinking about.</p>
-        {% endif %}
 
         <h2>What We've Done</h2>
         {%- include project-list.html -%}
