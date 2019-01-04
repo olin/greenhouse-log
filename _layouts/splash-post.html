@@ -26,19 +26,16 @@
             </div>
             </div>
 
-        <!-- <header class="post-header">
-            <h1 class="post-title p-name large" itemprop="name headline">{{ page.title | escape }}</h1>
-            <h3 class="p-name" style="text-align: center" itemprop="name headline">{{ page.subtitle | escape }}</h4>
-            <p class="post-meta">
-            <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-                {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-            </time>
-            {%- if page.author -%}
-                • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
-            {%- endif -%}</p>
-        </header> -->
-
         <div class="wrapper splash-wrapper">
+            <h3 class="p-name" style="text-align: center" itemprop="name headline">{{ page.summary | escape }}</h3>
+            <p class="post-meta">
+                    <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+                        {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+                    </time>
+                    {%- if page.author -%}
+                        • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
+                    {%- endif -%}
+            </p>
             <div class="post-content e-content" itemprop="articleBody" id="content" aria-label="Content">
                 {{ content }}
             </div>
