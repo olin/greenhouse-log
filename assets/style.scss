@@ -7,22 +7,23 @@
 
 @for $i from 1 through 8 {
     .rotating-wrapper-#{$i} {
-        width: 20%;
+        width: 40%;
+        height: 40% * (11 / 8.5);
         animation: spin-#{$i} 15s linear infinite;
         position: absolute;
-        transform-origin: 25vw 25vw;
+        transform-origin: 15vw 15vw;
         
     }
 
     @keyframes spin-#{$i} {
         0% {
-          transform: rotate(($i - 1) * 45 + 0deg) translate(200%, -25%);
+          transform: rotate(($i - 1) * 45 + 0deg) translate(75%, -150%);
         }
         50% {
-          transform: rotate(($i - 1) * 45 + 180deg) translate(200%, -25%);
+          transform: rotate(($i - 1) * 45 + 180deg) translate(75%, -150%);
         }
         100% {
-            transform: rotate(($i - 1) * 45 + 360deg) translate(200%, -25%);
+          transform: rotate(($i - 1) * 45 + 360deg) translate(75%, -150%);
         }
     }
 
@@ -41,8 +42,8 @@ body {
       background-color: #eee;
   
       display: grid;
-      grid-template-rows: auto 50vw auto;
-      grid-template-columns: auto 50vw auto;
+      grid-template-rows: auto 30vw auto;
+      grid-template-columns: auto 30vw auto;
     
       .title-box {
         width: 100%;
@@ -68,6 +69,7 @@ body {
         margin: 0 33%;
         height: 3rem;
         text-align: center;
+        line-height: 33px;
         background-color: #fff;
         border-radius: 10px 10px 0 0;
   
@@ -83,16 +85,7 @@ body {
           margin: auto;
           display: inline-block;
         }
-  
-        .arrow {
-          border: solid black;
-          border-width: 0 3px 3px 0;
-          display: inline-block;
-          padding: 3px;
-          transform: rotate(45deg);
-          top: -3px;
         }
-      }
     }
 }
 
