@@ -5,18 +5,22 @@
     <body>
         <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
-            <div id="wall">
+            <div class="splash">
                 <div class="animation-container">
-                        {% for i in (1..6) %}
+                        {% for i in (1..8) %}
                             <div class={{"rotating-wrapper-" | append: i}}>
-                                <img src="/assets/FrontPage.png" class="rotating-image">
+                                <img src={{"/assets/page" | append: i | append: ".png"}} class="rotating-image">
                             </div>
                             
                         {% endfor %}
                 </div>
-                <div id="whiteboard">
+                <div class="title-box">
                         <h1 class="post-title p-name large" itemprop="name headline">{{ page.title | escape }}</h1>
-                        
+                </div>
+                <div id="hint">
+                    <a href="#content">
+                        <i><p>Read more</p></i>
+                    </a>
                 </div>
 
             </div>
@@ -34,7 +38,7 @@
             {%- endif -%}</p>
         </header> -->
 
-        <div class="wrapper">
+        <div class="wrapper splash-wrapper">
             <div class="post-content e-content" itemprop="articleBody" id="content" aria-label="Content">
                 {{ content }}
             </div>
