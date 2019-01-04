@@ -1,9 +1,30 @@
 ---
 ---
 
+@keyframes spin {
+    0% {
+      transform: rotate(0deg) translate(450%, 0%);
+    }
+    50% {
+      transform: rotate(180deg) translate(450%, 0%);
+    }
+    100% {
+        transform: rotate(360deg) translate(450%, 0%);
+    }
+}
+
+.rotating-image {
+    width: 10%;
+    animation: spin 6s linear infinite;
+    position: absolute;
+    transform-origin: 500% 350%;
+}
+
 .animation-container {
+    position: relative;
+    width: 100%;
     height: 0px;
-    padding-top: 100%;
+    padding-bottom: 100%;
 }
 
 .medium {
