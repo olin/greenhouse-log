@@ -1,30 +1,45 @@
 ---
 ---
 
-@keyframes spin {
-    0% {
-      transform: rotate(0deg) translate(450%, 0%);
+
+@for $i from 1 through 6 {
+    .rotating-wrapper-#{$i} {
+        width: 10%;
+        animation: spin-#{$i} 15s linear infinite;
+        position: absolute;
+        transform-origin: 50vw 180%;
+        
     }
-    50% {
-      transform: rotate(180deg) translate(450%, 0%);
+
+    @keyframes spin-#{$i} {
+        0% {
+          transform: rotate(($i - 1) * 60 + 0deg) translate(450%, -50%);
+        }
+        50% {
+          transform: rotate(($i - 1) * 60 + 180deg) translate(450%, -50%);
+        }
+        100% {
+            transform: rotate(($i - 1) * 60 + 360deg) translate(450%, -50%);
+        }
     }
-    100% {
-        transform: rotate(360deg) translate(450%, 0%);
-    }
+
 }
 
 .rotating-image {
-    width: 10%;
-    animation: spin 6s linear infinite;
-    position: absolute;
-    transform-origin: 500% 350%;
+    transition: transform .3s;
+}
+
+.rotating-image:hover {
+    transform: scale(1.5);
 }
 
 .animation-container {
-    position: relative;
-    width: 100%;
+    position: absolute;
+    left: 0vw;
+    top: 0vw;
+    width: 100vw;
     height: 0px;
-    padding-bottom: 100%;
+    padding-bottom: 100vw * (9 / 16);
 }
 
 .medium {
