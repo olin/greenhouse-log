@@ -11,7 +11,7 @@
                 <source src="/assets/big_buck_bunny.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
         </video>
         <script src="/assets/js/three.js"></script>
-        <script src="/assets/js/controls/FirstPersonControls.js"></script>
+        <script src="/assets/js/controls/DragControls.js"></script>
 		<script>
             // Setup scene and camera
 			var scene = new THREE.Scene();
@@ -45,7 +45,7 @@
 			scene.add( tv );
             tv.position.set(0, 2.25, -3);
 
-            const pointLight = new THREE.PointLight(0xFFFFFF);
+            const pointLight = new THREE.PointLight(0xffffff);
 
             pointLight.position.x = 5;
             pointLight.position.y = 5;
@@ -53,7 +53,7 @@
 
             scene.add(pointLight);
 
-            var controls = new THREE.FirstPersonControls( camera, renderer.domElement );
+            var controls = new THREE.DragControls( camera, renderer.domElement );
             controls.lookVertical = false;
 
 
@@ -92,10 +92,6 @@
             var cylinder = new THREE.Mesh( geometry, cylMaterial );
             cylinder.material.side = THREE.DoubleSide;
             scene.add( cylinder );
-
-
-
-
 
 			var animate = function () {
 
