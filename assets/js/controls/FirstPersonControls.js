@@ -121,7 +121,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	};
 
 	this.onMouseMove = function ( event ) {
-        if (this.mouseDragOn) {
             if ( this.domElement === document ) {
 
                 this.mouseX = event.pageX - this.viewHalfX;
@@ -134,7 +133,6 @@ THREE.FirstPersonControls = function ( object, domElement ) {
     
             }
     
-        }
 		
 	};
 
