@@ -23,7 +23,8 @@
 			document.body.appendChild( renderer.domElement );
 
             // Create geometry
-			var pedGeometry = new THREE.BoxGeometry( 1, 2, 1 );
+            var pedGeometry = new THREE.BoxGeometry( 1, 2, 1 );
+            var TVGeometry = new THREE.BoxGeometry( 0.5, 2, 1 );
 
             // Mesh is what shaders interact with
 			var material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
@@ -46,9 +47,9 @@
             camera.position.y = 2.1;
             // camera.lookAt(new THREE.Vector3(0,10,1));
 
-            controls.lookSpeed = 0.1;
+            controls.lookSpeed = 4;
             controls.movementSpeed = 20;
-            controls.activeLook = true;
+            controls.activeLook = false;
             controls.lon = -90;
             controls.lat = -15;
             // controls.noFly = true;

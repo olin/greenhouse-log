@@ -33,7 +33,13 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.autoSpeedFactor = 0.0;
 
 	this.mouseX = 0;
-	this.mouseY = 0;
+    this.mouseY = 0;
+    
+    // Adding new mouse prev position values
+    this.mousePrevX = 0;
+    this.mousePrevY = 0;
+    this.mouseDeltaX = 0;
+    this.mouseDeltaY = 0;
 
 	this.lat = 0;
 	this.lon = 0;
@@ -96,6 +102,9 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		}
 
+        this.onMouseMove(event);
+        this.mousePrevX = this.mouseX;
+        this.mousePrevY = this.mouseY;
 		this.mouseDragOn = true;
 
 	};
@@ -116,25 +125,36 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		}
 
-		this.mouseDragOn = false;
+        this.mouseDragOn = false;
+        this.mouseDeltaX = 0;
+        this.mouseDeltaY = 0;
 
 	};
 
 	this.onMouseMove = function ( event ) {
-            if ( this.domElement === document ) {
+        if ( this.domElement === document ) {
 
-                this.mouseX = event.pageX - this.viewHalfX;
-                this.mouseY = event.pageY - this.viewHalfY;
-    
-            } else {
-    
-                this.mouseX = event.pageX - this.domElement.offsetLeft - this.viewHalfX;
-                this.mouseY = event.pageY - this.domElement.offsetTop - this.viewHalfY;
-    
-            }
+            this.mouseX = event.pageX - this.viewHalfX;
+            this.mouseY = event.pageY - this.viewHalfY;
+
+        } else {
+
+            this.mouseX = event.pageX - this.domElement.offsetLeft - this.viewHalfX;
+            this.mouseY = event.pageY - this.domElement.offsetTop - this.viewHalfY;
+
+        }
+
+        if (this.mouseDragOn) {
+            this.mouseDeltaX = this.mouseX - this.mousePrevX;
+            this.mouseDeltaY = this.mouseY - this.mousePrevY;
+        }
+
+        this.mousePrevX = this.mouseX;
+        this.mousePrevY = this.mouseY;
     
 		
-	};
+    };
+    
 
 	this.onKeyDown = function ( event ) {
 
@@ -214,11 +234,11 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		var actualLookSpeed = delta * this.lookSpeed;
 
-		if ( ! this.activeLook ) {
+		// if ( ! this.activeLook ) {
 
-			actualLookSpeed = 0;
+		// 	actualLookSpeed = 0;
 
-		}
+		// }
 
 		var verticalLookRatio = 1;
 
@@ -228,7 +248,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		}
 
-		this.lon += this.mouseX * actualLookSpeed;
+		this.lon -= this.mouseDeltaX * actualLookSpeed;
 		if ( this.lookVertical ) this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
 
 		this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
@@ -251,8 +271,9 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
         this.object.lookAt( targetPosition );
         
-        console.log(this.lat);
+        // console.log(this.lat);
         console.log(this.lon);
+        // console.log(this.mouseDeltaX);
 
 	};
 
