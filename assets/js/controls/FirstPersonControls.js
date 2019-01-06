@@ -272,7 +272,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
         this.object.lookAt( targetPosition );
         
         // console.log(this.lat);
-        console.log(this.lon);
+        // console.log(this.lon);
         // console.log(this.mouseDeltaX);
 
 	};
