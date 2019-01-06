@@ -12,7 +12,7 @@
 		<script>
             // Setup scene and camera
 			var scene = new THREE.Scene();
-            var camera = new THREE.PerspectiveCamera( 120, window.innerWidth/window.innerHeight, 0.1, 1000 );
+            var camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 0.1, 1000 );
             
             var clock = new THREE.Clock();
 
@@ -23,18 +23,18 @@
 			document.body.appendChild( renderer.domElement );
 
             // Create geometry
-			var pedGeometry = new THREE.BoxGeometry( 1, 1, 2 );
+			var pedGeometry = new THREE.BoxGeometry( 1, 2, 1 );
 
             // Mesh is what shaders interact with
 			var material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
 			var pedestal = new THREE.Mesh( pedGeometry, material );
 			scene.add( pedestal );
-            pedestal.position.set(0, 3, 0);
+            pedestal.position.set(0, 0, -5);
 
             const pointLight = new THREE.PointLight(0xFFFFFF);
 
             pointLight.position.x = 5;
-            pointLight.position.y = 0;
+            pointLight.position.y = 5;
             pointLight.position.z = 5;
 
             scene.add(pointLight);
@@ -43,20 +43,22 @@
             controls.lookVertical = false;
 
 
-			camera.position.z = 5;
+            camera.position.y = 2.1;
             // camera.lookAt(new THREE.Vector3(0,10,1));
 
-            controls.lookSpeed = 0.4;
+            controls.lookSpeed = 0.1;
             controls.movementSpeed = 20;
-            // contorls.activeLook = true;
-            controls.noFly = true;
+            controls.activeLook = true;
+            controls.lon = -90;
+            controls.lat = -15;
+            // controls.noFly = true;
             // controls.lookVertical = true;
             var vector = new THREE.Vector3(); // create once and reuse it!
 
 
 
 			var animate = function () {
-                console.log(camera.getWorldDirection( vector ));
+                // console.log(camera.getWorldDirection( vector ));
 
 
 
