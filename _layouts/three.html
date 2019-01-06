@@ -7,7 +7,7 @@
 		</style>
 	</head>
 	<body>
-        <video id="video" autoplay loop crossOrigin="anonymous" webkit-playsinline style="display:none">
+        <video id="video" autoplay loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
                 <source src="/assets/big_buck_bunny.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
         </video>
         <script src="/assets/js/three.js"></script>
@@ -68,12 +68,23 @@
             controls.lat = -15;
             // controls.noFly = true;
             // controls.lookVertical = true;
-            var vector = new THREE.Vector3(); // create once and reuse it!
+
+            var woodTexture = new THREE.TextureLoader().load( "/assets/WoodTexture.png" );
+            woodTexture.wrapS = THREE.RepeatWrapping;
+            woodTexture.wrapT = THREE.RepeatWrapping;
+            woodTexture.repeat.set( 4, 4 );
+
+            var geometry = new THREE.PlaneGeometry( 100, 100, 1, 1 );
+            var material = new THREE.MeshBasicMaterial( {map: woodTexture } );
+            var floor = new THREE.Mesh( geometry, material );
+            floor.material.side = THREE.DoubleSide;
+            floor.rotation.x = 3.14 / 2;
+            scene.add( floor ); 
+
 
 
 
 			var animate = function () {
-                // console.log(camera.getWorldDirection( vector ));
 
 
 
