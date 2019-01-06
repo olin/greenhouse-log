@@ -1,0 +1,76 @@
+<html>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+        <script src="/assets/js/three.js"></script>
+        <script src="/assets/js/controls/FirstPersonControls.js"></script>
+		<script>
+            // Setup scene and camera
+			var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 120, window.innerWidth/window.innerHeight, 0.1, 1000 );
+            
+            var clock = new THREE.Clock();
+
+
+            // Setup renderer and add to window
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+            // Create geometry
+			var pedGeometry = new THREE.BoxGeometry( 1, 1, 2 );
+
+            // Mesh is what shaders interact with
+			var material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
+			var pedestal = new THREE.Mesh( pedGeometry, material );
+			scene.add( pedestal );
+            pedestal.position.set(0, 3, 0);
+
+            const pointLight = new THREE.PointLight(0xFFFFFF);
+
+            pointLight.position.x = 5;
+            pointLight.position.y = 0;
+            pointLight.position.z = 5;
+
+            scene.add(pointLight);
+
+            var controls = new THREE.FirstPersonControls( camera, renderer.domElement );
+            controls.lookVertical = false;
+
+
+			camera.position.z = 5;
+            // camera.lookAt(new THREE.Vector3(0,10,1));
+
+            controls.lookSpeed = 0.4;
+            controls.movementSpeed = 20;
+            // contorls.activeLook = true;
+            controls.noFly = true;
+            // controls.lookVertical = true;
+            var vector = new THREE.Vector3(); // create once and reuse it!
+
+
+
+			var animate = function () {
+                console.log(camera.getWorldDirection( vector ));
+
+
+
+                requestAnimationFrame( animate );
+                // console.log(camera.position)
+                controls.update(clock.getDelta());
+
+				// pedestal.rotation.x += 0.01;
+				// pedestal.rotation.y += 0.01;
+
+				renderer.render( scene, camera );
+			};
+
+			animate();
+		</script>
+	</body>
+</html>
