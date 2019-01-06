@@ -54,7 +54,10 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.mouseDragOn = false;
 
 	this.viewHalfX = 0;
-	this.viewHalfY = 0;
+    this.viewHalfY = 0;
+    
+    this.moveAngle = 40 / window.innerWidth;
+    console.log(this.moveAngle)
 
 	if ( this.domElement !== document ) {
 
@@ -89,7 +92,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		}
 
 		event.preventDefault();
-		event.stopPropagation();
+        event.stopPropagation();
+        this.domElement.setAttribute('style', 'cursor: move;' );
 
 		if ( this.activeLook ) {
 
@@ -112,7 +116,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	this.onMouseUp = function ( event ) {
 
 		event.preventDefault();
-		event.stopPropagation();
+        event.stopPropagation();
+        this.domElement.setAttribute('style', 'cursor: default;' );
 
 		if ( this.activeLook ) {
 
@@ -126,8 +131,8 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 		}
 
         this.mouseDragOn = false;
-        this.mouseDeltaX = 0;
-        this.mouseDeltaY = 0;
+        // this.mouseDeltaX = 0;
+        // this.mouseDeltaY = 0;
 
 	};
 
@@ -248,7 +253,15 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 		}
 
-		this.lon -= this.mouseDeltaX * actualLookSpeed;
+        this.lon -= this.mouseDeltaX * this.moveAngle;
+        if (!this.mouseDragOn) {
+            this.mouseDeltaX *= 0.9;
+        }
+
+        if (Math.abs(this.mouseDeltaX) < 2) {
+            this.mouseDeltaX = 0;
+        }
+
 		if ( this.lookVertical ) this.lat -= this.mouseY * actualLookSpeed * verticalLookRatio;
 
 		this.lat = Math.max( - 85, Math.min( 85, this.lat ) );
@@ -277,11 +290,11 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 
 	};
 
-	function contextmenu( event ) {
+	// function contextmenu( event ) {
 
-		event.preventDefault();
+	// 	event.preventDefault();
 
-	}
+	// }
 
 	this.dispose = function () {
 
@@ -301,7 +314,7 @@ THREE.FirstPersonControls = function ( object, domElement ) {
 	var _onKeyDown = bind( this, this.onKeyDown );
 	var _onKeyUp = bind( this, this.onKeyUp );
 
-	this.domElement.addEventListener( 'contextmenu', contextmenu, false );
+	// this.domElement.addEventListener( 'contextmenu', contextmenu, false );
 	this.domElement.addEventListener( 'mousemove', _onMouseMove, false );
 	this.domElement.addEventListener( 'mousedown', _onMouseDown, false );
 	this.domElement.addEventListener( 'mouseup', _onMouseUp, false );

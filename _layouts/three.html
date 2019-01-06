@@ -15,7 +15,7 @@
 		<script>
             // Setup scene and camera
 			var scene = new THREE.Scene();
-            var camera = new THREE.PerspectiveCamera( 70, window.innerWidth/window.innerHeight, 0.1, 1000 );
+            var camera = new THREE.PerspectiveCamera( 40, window.innerWidth/window.innerHeight, 0.1, 1000 );
             
             var clock = new THREE.Clock();
 
@@ -80,6 +80,19 @@
             floor.material.side = THREE.DoubleSide;
             floor.rotation.x = 3.14 / 2;
             scene.add( floor ); 
+
+            var wallTexture = new THREE.TextureLoader().load( "/assets/WallTexture.jpg" );
+            wallTexture.wrapS = THREE.RepeatWrapping;
+            wallTexture.wrapT = THREE.RepeatWrapping;
+            wallTexture.repeat.set( 50, 50 );
+
+
+            var geometry = new THREE.CylinderGeometry( 7, 7, 50, 32 );
+            var cylMaterial = new THREE.MeshBasicMaterial( {map: wallTexture} );
+            var cylinder = new THREE.Mesh( geometry, cylMaterial );
+            cylinder.material.side = THREE.DoubleSide;
+            scene.add( cylinder );
+
 
 
 
