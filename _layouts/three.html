@@ -1,5 +1,6 @@
 <html>
 	<head>
+        <link rel="stylesheet" href="/assets/style.css">
 		<title>My first three.js app</title>
 		<style>
 			body { margin: 0; }
@@ -10,6 +11,8 @@
         <video id="video" autoplay loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
                 <source src="/assets/big_buck_bunny.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
         </video>
+        <a href="/projects/balloon" style="display:none" id="balloon"></a>
+        <div id="balloon-info">THE BALLOON</div>
         <script src="/assets/js/three.js"></script>
         <script src="/assets/js/controls/DragControls.js"></script>
         <script src="/assets/js/OBJLoader.js"></script>
@@ -174,10 +177,26 @@
 
             
             window.addEventListener( 'mousemove', onTouchMove );
+            window.addEventListener( 'mousedown', onMouseDown );
+            window.addEventListener( 'click', onMouseClick );
             window.addEventListener( 'touchmove', onTouchMove );
+
+            var hasMoved = false;
+            function onMouseDown(event ) {
+                hasMoved = false;
+                console.log(hasMoved);
+            }
+
+            function onMouseClick( event ) {
+                console.log(hasMoved);
+                if (checkIntersection()) {
+                    document.getElementById('balloon').click();
+                }
+            }
 
 
             function onTouchMove( event ) {
+                hasMoved = true;
                 var x, y;
                 if ( event.changedTouches ) {
                     x = event.changedTouches[ 0 ].pageX;
@@ -198,19 +217,22 @@
 
 
             function checkIntersection() {
-					raycaster.setFromCamera( mouse, camera );
-					var intersects = raycaster.intersectObjects( [ scene ], true );
-					if ( intersects.length > 0 ) {
-                        var selectedObject = intersects[ 0 ].object;
-                        if (selectedObject.name == "TV") {
-                            addSelectedObject( selectedObject );
-                            outlinePass.selectedObjects = selectedObjects;
-                        } else {
-                            outlinePass.selectedObjects = [];
-                        }
-					} else {
-						// outlinePass.selectedObjects = [];
-					}
+                raycaster.setFromCamera( mouse, camera );
+                var intersects = raycaster.intersectObjects( [ scene ], true );
+                if ( intersects.length > 0 ) {
+                    var selectedObject = intersects[ 0 ].object;
+                    if (selectedObject.name == "TV") {
+                        renderer.domElement.setAttribute('style', 'cursor: pointer;' )
+                        addSelectedObject( selectedObject );
+                        outlinePass.selectedObjects = selectedObjects;
+                        return true;
+                    } else {
+                        outlinePass.selectedObjects = [];
+                    }
+                } else {
+                    return false;
+                    // outlinePass.selectedObjects = [];
+                }
             }
 
 
