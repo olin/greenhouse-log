@@ -14,7 +14,7 @@
         <script src="/assets/js/controls/DragControls.js"></script>
 		<script>
 
-            const FOV = 120;
+            const FOV = 50;
             // Setup scene and camera
 			var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera( FOV, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -44,7 +44,7 @@
             texture = new THREE.VideoTexture( video );
             const parameters = { color: 0xffffff, map: texture };
 
-            var TVMaterial = new THREE.MeshLambertMaterial(parameters);
+            var TVMaterial = new THREE.MeshBasicMaterial(parameters);
             var tv = new THREE.Mesh( TVGeometry, TVMaterial );
             tv.castShadow = true;
 			scene.add( tv );
@@ -93,7 +93,7 @@
             var wallTexture = new THREE.TextureLoader().load( "/assets/WallTexture.jpg" );
             wallTexture.wrapS = THREE.RepeatWrapping;
             wallTexture.wrapT = THREE.RepeatWrapping;
-            wallTexture.repeat.set( 50, 50 );
+            wallTexture.repeat.set( 200, 200 );
 
 
             var geometry = new THREE.CylinderGeometry( 7, 7, 50, 32 );
