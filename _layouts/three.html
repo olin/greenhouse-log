@@ -225,9 +225,11 @@
                         renderer.domElement.setAttribute('style', 'cursor: pointer;' )
                         addSelectedObject( selectedObject );
                         outlinePass.selectedObjects = selectedObjects;
+                        document.getElementById( 'balloon-info' ).style.visibility = 'visible';
                         return true;
                     } else {
                         outlinePass.selectedObjects = [];
+                        document.getElementById( 'balloon-info' ).style.visibility = 'hidden';
                     }
                 } else {
                     return false;
