@@ -12,9 +12,11 @@
         </video>
         <script src="/assets/js/three.js"></script>
         <script src="/assets/js/controls/DragControls.js"></script>
+        <script src="/assets/js/OBJLoader.js"></script>
+        <script src="/assets/js/MTLLoader.js"></script>
 		<script>
 
-            const FOV = 50;
+            const FOV = 60;
             // Setup scene and camera
 			var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera( FOV, window.innerWidth/window.innerHeight, 0.1, 1000 );
@@ -25,11 +27,29 @@
 			var renderer = new THREE.WebGLRenderer();
             renderer.setSize( window.innerWidth, window.innerHeight );
             renderer.shadowMap.enabled = true;
-			document.body.appendChild( renderer.domElement );
+            document.body.appendChild( renderer.domElement );
+            
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
+            const pointLight = new THREE.PointLight(0xffffff,.3);
+            pointLight.castShadow = true;
+
+            pointLight.position.x = 2;
+            pointLight.position.y = 20;
+            pointLight.position.z = 2; 
+
+            pointLight.shadow.mapSize.x = 1024;
+            pointLight.shadow.mapSize.y = 1024;
+
+            scene.add(pointLight);
+            scene.add(ambientLight);
+
+            var helper = new THREE.CameraHelper( pointLight.shadow.camera );
+            scene.add( helper );
+
 
             // Create geometry
             var pedGeometry = new THREE.BoxGeometry( 1, 2, 1 );
-            var TVGeometry = new THREE.BoxGeometry( 0.5, 0.5, 0.5 );
+            var TVGeometry = new THREE.BoxGeometry( .7, 0.5, 1, 1 );
 
             // Mesh is what shaders interact with
 			var material = new THREE.MeshStandardMaterial( { color: 0xffffff } );
@@ -37,7 +57,7 @@
             pedestal.castShadow = true;
             pedestal.receiveShadow = true;
 			scene.add( pedestal );
-            pedestal.position.set(0, 1, -3);
+            pedestal.position.set(0, 1, -2);
 
             // Making video texture
             video = document.getElementById( 'video' );
@@ -45,35 +65,21 @@
             const parameters = { color: 0xffffff, map: texture };
 
             var TVMaterial = new THREE.MeshBasicMaterial(parameters);
-            var tv = new THREE.Mesh( TVGeometry, TVMaterial );
-            tv.castShadow = true;
-			scene.add( tv );
-            tv.position.set(0, 2.25, -3);
+            var tvScreen = new THREE.Mesh( TVGeometry, TVMaterial );
+            tvScreen.castShadow = true;
+			scene.add( tvScreen );
+            tvScreen.position.set(0, 2.25, -3);
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
-            const pointLight = new THREE.SpotLight(0xffffff,.05);
-            pointLight.castShadow = true;
-
-            pointLight.position.x = 2;
-            pointLight.position.y = 5;
-            pointLight.position.z = 20;
-
-            scene.add(pointLight);
-            scene.add(ambientLight);
 
             var controls = new THREE.DragControls( camera, renderer.domElement, FOV );
-            controls.lookVertical = false;
 
 
 
-            camera.position.y = 2.3;
+            camera.position.y = 2.4;
             // camera.lookAt(new THREE.Vector3(0,10,1));
 
-            controls.lookSpeed = 4;
-            controls.movementSpeed = 20;
-            controls.activeLook = false;
             controls.lon = -90;
-            controls.lat = -15;
+            controls.lat = -10;
             // controls.noFly = true;
             // controls.lookVertical = true;
 
@@ -85,6 +91,9 @@
             var geometry = new THREE.PlaneGeometry( 100, 100, 1, 1 );
             var material = new THREE.MeshStandardMaterial( {map: woodTexture } );
             var floor = new THREE.Mesh( geometry, material );
+
+            floor.material.roughness = .1;
+            floor.material.metalness = .5;
             floor.material.side = THREE.DoubleSide;
             floor.rotation.x = 3.14 / 2;
             floor.receiveShadow = true;
@@ -100,7 +109,34 @@
             var cylMaterial = new THREE.MeshStandardMaterial( {map: wallTexture} );
             var cylinder = new THREE.Mesh( geometry, cylMaterial );
             cylinder.material.side = THREE.DoubleSide;
+            cylinder.material.bumpMap = wallTexture;
+            cylinder.material.bumpScale = 0.05;
+
+            cylinder.material.roughness = 1;
             scene.add( cylinder );
+
+
+
+
+                var loader = new THREE.OBJLoader( );
+                loader.load( '/assets/tv.obj', function ( tv ) {
+                    tv.traverse( function ( child ) {
+                        if ( child instanceof THREE.Mesh ) {
+                            if (child.material.color != null) {
+                                child.material.color.setHex(0x222222);
+                            }
+                        }
+                    } );
+                    tv.position.set(0.35, 1.8, -3.25);
+                    tv.scale.set(0.5,0.5,0.5);
+                    tv.castShadow = true;
+                    // var tvMaterial = new THREE.MeshStandardMaterial( {color: 0x333333} );
+                    // tvMesh = new THREE.Mesh (tv, tvMaterial);
+                    scene.add( tv );
+                    var box = new THREE.Box3().setFromObject( tv );
+                    console.log(box.getSize() );
+                } );
+
 
 			var animate = function () {
 
