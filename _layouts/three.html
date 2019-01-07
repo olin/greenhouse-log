@@ -31,6 +31,9 @@
             var camera = new THREE.PerspectiveCamera( FOV, window.innerWidth/window.innerHeight, 0.1, 1000 );
             var clock = new THREE.Clock();
 
+            // Keeps track of TV mesh for outlines
+            var tvMesh;
+
 
             // Setup renderer and add to window
 			var renderer = new THREE.WebGLRenderer();
@@ -76,7 +79,7 @@
             var TVMaterial = new THREE.MeshBasicMaterial(parameters);
             var tvScreen = new THREE.Mesh( TVGeometry, TVMaterial );
             tvScreen.castShadow = true;
-            tvScreen.rotation.y = -.08;
+            tvScreen.rotation.y = -.087;
 			scene.add( tvScreen );
             tvScreen.position.set(-.18, 2.8, -2.95);
 
@@ -126,33 +129,41 @@
             scene.add( cylinder );
 
 
+            var loader = new THREE.OBJLoader( );
+            loader.load( '/assets/tv.obj', function ( tv ) {
+                tv.traverse( function ( child ) {
+                    if ( child instanceof THREE.Mesh ) {
+                        // Mark the mesh that is the TV
+                        console.log(child.name);
+                        objName = child.name;
+                        child.name = 'TV';
+                        var standardMaterial;
 
-
-                var loader = new THREE.OBJLoader( );
-                loader.load( '/assets/tv.obj', function ( tv ) {
-                    tv.traverse( function ( child ) {
-                        if ( child instanceof THREE.Mesh ) {
-                            // Mark the mesh that is the TV
-                            var box = new THREE.Box3().setFromObject( child );
-                            if (box.getSize().x > 2.5) {
-                                child.name = "TV";
-                            }
-                            // child.geometry.center();
-                            var standardMaterial = new THREE.MeshStandardMaterial( { color: 0x222222 } );
-                            child.material = standardMaterial;
-							child.receiveShadow = true;
-							child.castShadow = true;
+                        if (objName.startsWith('TV')) {
+                            console.log(child);
+                            tvMesh = child;
+                            standardMaterial = new THREE.MeshStandardMaterial( { color: 0x222222 } );
+                        } else if (objName.startsWith('speaker')) {
+                            standardMaterial = new THREE.MeshStandardMaterial( { color: 0x222222 } );
+                        } else if (objName.startsWith('ant') || objName.startsWith('knob')) {
+                            standardMaterial = new THREE.MeshStandardMaterial( { color: 0x999999 } );
+                        } else if (objName.startsWith('screen')) {
+                            standardMaterial = TVMaterial;
                         }
-                    } );
-                    tv.position.set(0.35, 1.95, -3.25);
-                    tv.scale.set(0.5,0.5,0.5);
-                    tv.castShadow = true;
-                    // var tvMaterial = new THREE.MeshStandardMaterial( {color: 0x333333} );
-                    // tvMesh = new THREE.Mesh (tv, tvMaterial);
-                    scene.add( tv );
-                    // var box = new THREE.Box3().setFromObject( tv );
-                    // console.log(box.getSize() );
+
+                        // child.geometry.center();
+                        child.material = standardMaterial;
+                        child.receiveShadow = true;
+                        child.castShadow = true;
+                    }
                 } );
+                tv.position.set(-0.35, 1.87, -3);
+                tv.scale.set(0.5,0.5,0.5);
+                tv.castShadow = true;
+                scene.add( tv );
+                // var box = new THREE.Box3().setFromObject( tv );
+                // console.log(box.getSize() );
+            } );
 
             var raycaster = new THREE.Raycaster();
 			var mouse = new THREE.Vector2();
@@ -223,8 +234,10 @@
                     var selectedObject = intersects[ 0 ].object;
                     if (selectedObject.name == "TV") {
                         renderer.domElement.setAttribute('style', 'cursor: pointer;' )
-                        addSelectedObject( selectedObject );
+                        console.log(tvMesh);
+                        addSelectedObject( tvMesh );
                         outlinePass.selectedObjects = selectedObjects;
+                        console.log(outlinePass.selectedObjects);
                         document.getElementById( 'balloon-info' ).style.visibility = 'visible';
                         return true;
                     } else {
