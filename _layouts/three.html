@@ -75,7 +75,7 @@
             tvScreen.castShadow = true;
             tvScreen.rotation.y = -.08;
 			scene.add( tvScreen );
-            tvScreen.position.set(-.18, 2.65, -2.95);
+            tvScreen.position.set(-.18, 2.8, -2.95);
 
 
             var controls = new THREE.DragControls( camera, renderer.domElement, FOV );
@@ -129,6 +129,11 @@
                 loader.load( '/assets/tv.obj', function ( tv ) {
                     tv.traverse( function ( child ) {
                         if ( child instanceof THREE.Mesh ) {
+                            // Mark the mesh that is the TV
+                            var box = new THREE.Box3().setFromObject( child );
+                            if (box.getSize().x > 2.5) {
+                                child.name = "TV";
+                            }
                             // child.geometry.center();
                             var standardMaterial = new THREE.MeshStandardMaterial( { color: 0x222222 } );
                             child.material = standardMaterial;
@@ -136,7 +141,7 @@
 							child.castShadow = true;
                         }
                     } );
-                    tv.position.set(0.35, 1.8, -3.25);
+                    tv.position.set(0.35, 1.95, -3.25);
                     tv.scale.set(0.5,0.5,0.5);
                     tv.castShadow = true;
                     // var tvMaterial = new THREE.MeshStandardMaterial( {color: 0x333333} );
@@ -154,12 +159,19 @@
 
 
             composer = new THREE.EffectComposer( renderer );
+            composer.setSize(window.innerWidth, window.innerHeight);
 
             var renderPass = new THREE.RenderPass( scene, camera );
             composer.addPass( renderPass );
 
             outlinePass = new THREE.OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
             composer.addPass( outlinePass );
+
+            var copyPass = new THREE.ShaderPass( THREE.CopyShader );
+            copyPass.renderToScreen = true;
+            composer.addPass( copyPass );
+
+
             
             window.addEventListener( 'mousemove', onTouchMove );
             window.addEventListener( 'touchmove', onTouchMove );
@@ -189,10 +201,13 @@
 					raycaster.setFromCamera( mouse, camera );
 					var intersects = raycaster.intersectObjects( [ scene ], true );
 					if ( intersects.length > 0 ) {
-						var selectedObject = intersects[ 0 ].object;
-						addSelectedObject( selectedObject );
-                        outlinePass.selectedObjects = selectedObjects;
-                        // console.log(outlinePass);
+                        var selectedObject = intersects[ 0 ].object;
+                        if (selectedObject.name == "TV") {
+                            addSelectedObject( selectedObject );
+                            outlinePass.selectedObjects = selectedObjects;
+                        } else {
+                            outlinePass.selectedObjects = [];
+                        }
 					} else {
 						// outlinePass.selectedObjects = [];
 					}
