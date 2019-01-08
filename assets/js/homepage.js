@@ -178,7 +178,6 @@ var highlightMeshes = {};
             function onMouseDown(event ) {
                 event.preventDefault();
                 event.stopPropagation();
-                console.log('test');
                 hasMoved = false;
                 controls.mouseDragOn = true;
             }

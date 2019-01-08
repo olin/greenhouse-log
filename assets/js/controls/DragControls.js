@@ -55,7 +55,6 @@ THREE.DragControls = function ( object, domElement, FOV, xVal ) {
 
 	this.update = function ( delta ) {
 
-		console.log(this.mouseDragOn)
 		// Computes horizontal width of FOV in units
 		const magicScale = 1.6; // TODO figure out why it's off by this much
 		const FOVWidth = 2*(Math.sin((FOV/2)*(Math.PI/180)));
