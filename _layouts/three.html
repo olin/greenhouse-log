@@ -18,11 +18,11 @@
             <source src="/assets/big_buck_bunny.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
         </video>
         <a href="/projects/balloon" style="display:none" id="video1-link"></a>
-        <a href="/projects/balloon" style="display:none" id="video2-link"></a>
+        <a href="/projects/alumni" style="display:none" id="video2-link"></a>
         <a href="/projects/balloon" style="display:none" id="video3-link"></a>
         <div class="video-info" id="video1-info">THE BALLOON</div>
-        <div class="video-info" id="video2-info">THE BALLOON</div>
-        <div class="video-info" id="video3-info">THE BALLOON</div>
+        <div class="video-info" id="video2-info">WGBH ALUMNI WEEKEND</div>
+        <div class="video-info" id="video3-info">MAKING ZINES</div>
         <script src="/assets/js/three.js"></script>
         <script src="/assets/js/controls/DragControls.js"></script>
         <script src="/assets/js/OBJLoader.js"></script>
@@ -152,12 +152,12 @@
                     tv.traverse( function ( child ) {
                         if ( child instanceof THREE.Mesh ) {
                             // Mark the mesh that is the TV
-                            sobjName = child.name;
+                            objName = child.name;
                             child.name = 'TV';
                             child._id = elemId;
 
                             if (objName.startsWith('TV')) {
-                                highlightMeshes[elemId].mesh = child;
+                                highlightMeshes[elemId] = {mesh: child};
                             } 
 
                             if (objName.startsWith('ant') || objName.startsWith('knob')) {
@@ -223,7 +223,7 @@
             function onMouseClick( event ) {
                 console.log(hasMoved);
                 if (checkIntersection()) {
-                    document.getElementById('balloon').click();
+                    document.getElementById(selectedObjects[0]._id + '-link').click();
                 }
             }
 
@@ -256,18 +256,19 @@
                     var selectedObject = intersects[ 0 ].object;
                     if (selectedObject.name == "TV") {
                         renderer.domElement.setAttribute('style', 'cursor: pointer' )
-                        outlinePass.selectedObjects = [highlightMeshes[selectedObject._id].mesh];
-                        console.log(outlinePass.selectedObjects);
-                        // document.getElementById( 'balloon-info' ).style.visibility = 'visible';
+                        selectedObjects = [highlightMeshes[selectedObject._id].mesh]
+                        outlinePass.selectedObjects = selectedObjects;
+                        document.getElementById( selectedObject._id + '-info' ).style.visibility = 'visible';                            
                         return true;
-                    } else {
-                        outlinePass.selectedObjects = [];
-                        // document.getElementById( 'balloon-info' ).style.visibility = 'hidden';
                     }
-                } else {
-                    return false;
-                    // outlinePass.selectedObjects = [];
                 }
+                if (selectedObjects.length > 0) {
+                    document.getElementById( selectedObjects[0]._id + '-info' ).style.visibility = 'hidden';
+                    selectedObjects = []  
+                    outlinePass.selectedObjects = selectedObjects;
+                }
+                return false;
+                
             }
 
 
