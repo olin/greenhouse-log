@@ -4,14 +4,14 @@
  * @author paulirish / http://paulirish.com/
  */
 
-THREE.DragControls = function ( object, domElement, FOV ) {
+THREE.DragControls = function ( object, domElement, FOV, xVal ) {
 
 	this.object = object;
 	this.target = new THREE.Vector3( 0, 0, 0 );
 
 	this.domElement = ( domElement !== undefined ) ? domElement : document;
 
-	this.mouseX = 0;
+	this.mouseX = xVal;
 	
 	this.FOVAngle = 0;
 	this.prevFOVAngle = 0;
@@ -53,42 +53,9 @@ THREE.DragControls = function ( object, domElement, FOV ) {
 
 	};
 
-	this.onMouseDown = function ( event ) {
-
-		if ( this.domElement !== document ) {
-
-			this.domElement.focus();
-
-		}
-
-		event.preventDefault();
-        event.stopPropagation();
-        this.domElement.setAttribute('style', 'cursor: move;' );
-
-		this.mouseDragOn = true;
-
-	};
-
-	this.onMouseUp = function ( event ) {
-
-		event.preventDefault();
-        event.stopPropagation();
-        this.domElement.setAttribute('style', 'cursor: default;' );
-
-        this.mouseDragOn = false;
-	};
-
-	this.onMouseMove = function ( event ) {
-        if ( this.domElement === document ) {
-            this.mouseX = event.pageX;
-        } else {
-            this.mouseX = event.pageX - this.domElement.offsetLeft;
-        }    
-	
-    };
-
 	this.update = function ( delta ) {
 
+		console.log(this.mouseDragOn)
 		// Computes horizontal width of FOV in units
 		const magicScale = 1.6; // TODO figure out why it's off by this much
 		const FOVWidth = 2*(Math.sin((FOV/2)*(Math.PI/180)));
@@ -126,42 +93,6 @@ THREE.DragControls = function ( object, domElement, FOV ) {
         
 
 	};
-
-	// function contextmenu( event ) {
-
-	// 	event.preventDefault();
-
-	// }
-
-	this.dispose = function () {
-
-		this.domElement.removeEventListener( 'contextmenu', contextmenu, false );
-		this.domElement.removeEventListener( 'mousedown', _onMouseDown, false );
-		this.domElement.removeEventListener( 'mousemove', _onMouseMove, false );
-		this.domElement.removeEventListener( 'mouseup', _onMouseUp, false );
-
-
-	};
-
-	var _onMouseMove = bind( this, this.onMouseMove );
-	var _onMouseDown = bind( this, this.onMouseDown );
-	var _onMouseUp = bind( this, this.onMouseUp );
-
-	// this.domElement.addEventListener( 'contextmenu', contextmenu, false );
-	this.domElement.addEventListener( 'mousemove', _onMouseMove, false );
-	this.domElement.addEventListener( 'mousedown', _onMouseDown, false );
-	this.domElement.addEventListener( 'mouseup', _onMouseUp, false );
-
-
-	function bind( scope, fn ) {
-
-		return function () {
-
-			fn.apply( scope, arguments );
-
-		};
-
-	}
 
 	this.handleResize();
 
