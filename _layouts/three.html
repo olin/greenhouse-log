@@ -27,65 +27,49 @@
 
             var tvMesh;
             const FOV = 60;
+
             // Setup scene and camera
 			var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera( FOV, window.innerWidth/window.innerHeight, 0.1, 1000 );
             var clock = new THREE.Clock();
             var renderer = new THREE.WebGLRenderer();
+
+            // Renderer setup
             renderer.setSize( window.innerWidth, window.innerHeight );
             renderer.shadowMap.enabled = true;
             document.body.appendChild( renderer.domElement );
 
             addLights(scene);
 
-            // Keeps track of TV mesh for outlines
+            composer = new THREE.EffectComposer( renderer );
+            composer.setSize(window.innerWidth, window.innerHeight);
 
+            var renderPass = new THREE.RenderPass( scene, camera );
+            composer.addPass( renderPass );
 
-            // Setup renderer and add to window
+            outlinePass = new THREE.OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
+            composer.addPass( outlinePass );
 
+            var copyPass = new THREE.ShaderPass( THREE.CopyShader );
+            copyPass.renderToScreen = true;
+            composer.addPass( copyPass );
+
+            var raycaster = new THREE.Raycaster();
+			var mouse = new THREE.Vector2();
+            var selectedObjects = [];
+            var composer;
+            var outlinePass;
+
+            window.addEventListener( 'mousemove', onTouchMove );
+            window.addEventListener( 'mousedown', onMouseDown );
+            window.addEventListener( 'click', onMouseClick );
+            window.addEventListener( 'touchmove', onTouchMove );
             
-            
-
-            // var helper = new THREE.CameraHelper( pointLight.shadow.camera );
-            // scene.add( helper );
-
-
-            // Create geometry
-            var pedGeometry = new THREE.BoxGeometry( 1, 2, 1 );
-            var TVGeometry = new THREE.BoxGeometry( .9, .9, 1, 1 );
-
-            // Mesh is what shaders interact with
-			var material = new THREE.MeshStandardMaterial( { color: 0xffffff } );
-            var pedestal = new THREE.Mesh( pedGeometry, material );
-            pedestal.castShadow = true;
-            pedestal.receiveShadow = true;
-			scene.add( pedestal );
-            pedestal.position.set(0, 1, -3);
-
-            // Making video texture
-            video = document.getElementById( 'video' );
-            texture = new THREE.VideoTexture( video );
-            const parameters = { color: 0xffffff, map: texture };
-
-            var TVMaterial = new THREE.MeshBasicMaterial(parameters);
-            var tvScreen = new THREE.Mesh( TVGeometry, TVMaterial );
-            tvScreen.castShadow = true;
-            tvScreen.rotation.y = -.1;
-			scene.add( tvScreen );
-            tvScreen.position.set(-.14, 2.7, -3.15);
-
-
             var controls = new THREE.DragControls( camera, renderer.domElement, FOV );
-
-
-
             camera.position.y = 2.4;
-            // camera.lookAt(new THREE.Vector3(0,10,1));
-
+            // camera.position.z = 3;
             controls.lon = -90;
             controls.lat = -10;
-            // controls.noFly = true;
-            // controls.lookVertical = true;
 
             var woodTexture = new THREE.TextureLoader().load( "/assets/WoodTexture.png" );
             woodTexture.wrapS = THREE.RepeatWrapping;
@@ -119,69 +103,83 @@
             cylinder.material.roughness = 1;
             scene.add( cylinder );
 
+            addTV(0, scene);
+            addTV(120, scene);
+            addTV(240, scene);
 
-            var loader = new THREE.OBJLoader( );
-            loader.load( '/assets/tv.obj', function ( tv ) {
-                tv.traverse( function ( child ) {
-                    if ( child instanceof THREE.Mesh ) {
-                        // Mark the mesh that is the TV
-                        console.log(child.name);
-                        objName = child.name;
-                        child.name = 'TV';
-                        var standardMaterial;
-
-                        if (objName.startsWith('TV')) {
-                            console.log(child);
-                            tvMesh = child;
-                            standardMaterial = new THREE.MeshStandardMaterial( { color: 0x222222 } );
-                        } else if (objName.startsWith('speaker')) {
-                            standardMaterial = new THREE.MeshStandardMaterial( { color: 0x222222 } );
-                        } else if (objName.startsWith('ant') || objName.startsWith('knob')) {
-                            standardMaterial = new THREE.MeshStandardMaterial( { color: 0x999999 } );
-                        } else if (objName.startsWith('screen')) {
-                            standardMaterial = TVMaterial;
-                        }
-
-                        // child.geometry.center();
-                        child.material = standardMaterial;
-                        child.receiveShadow = true;
-                        child.castShadow = true;
-                    }
-                } );
-                tv.position.set(-0.35, 1.87, -3);
-                tv.scale.set(0.5,0.5,0.5);
-                tv.castShadow = true;
-                scene.add( tv );
-                // var box = new THREE.Box3().setFromObject( tv );
-                // console.log(box.getSize() );
-            } );
-
-            var raycaster = new THREE.Raycaster();
-			var mouse = new THREE.Vector2();
-            var selectedObjects = [];
-            var composer;
-            var outlinePass;
+               
 
 
-            composer = new THREE.EffectComposer( renderer );
-            composer.setSize(window.innerWidth, window.innerHeight);
-
-            var renderPass = new THREE.RenderPass( scene, camera );
-            composer.addPass( renderPass );
-
-            outlinePass = new THREE.OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
-            composer.addPass( outlinePass );
-
-            var copyPass = new THREE.ShaderPass( THREE.CopyShader );
-            copyPass.renderToScreen = true;
-            composer.addPass( copyPass );
 
 
             
-            window.addEventListener( 'mousemove', onTouchMove );
-            window.addEventListener( 'mousedown', onMouseDown );
-            window.addEventListener( 'click', onMouseClick );
-            window.addEventListener( 'touchmove', onTouchMove );
+            function addTV (angle, scene) {
+
+                const angleRad = angle*(Math.PI/180);
+
+                const basePos = {x: 3*Math.sin(angle*(Math.PI/180)), y: 0, z: -3*Math.cos(angle*(Math.PI/180))};
+                // Create geometry
+                var pedGeometry = new THREE.BoxGeometry( 1, 2, 1 );
+                var screenGeometry = new THREE.BoxGeometry( .9, .9, 1, 1 );
+
+                // Mesh is what shaders interact with
+                var material = new THREE.MeshStandardMaterial( { color: 0xffffff } );
+                var pedestal = new THREE.Mesh( pedGeometry, material );
+                pedestal.castShadow = true;
+                pedestal.receiveShadow = true;
+                scene.add( pedestal );
+                pedestal.position.set(basePos.x, basePos.y+1, basePos.z);
+                pedestal.rotation.y = angleRad;
+
+                // Making video texture
+                video = document.getElementById( 'video' );
+                texture = new THREE.VideoTexture( video );
+                const parameters = { color: 0xffffff, map: texture };
+
+                var screenMaterial = new THREE.MeshBasicMaterial(parameters);
+                var tvScreen = new THREE.Mesh( screenGeometry, screenMaterial );
+                tvScreen.castShadow = true;
+                tvScreen.rotation.y = -.1 + angleRad;
+                scene.add( tvScreen );
+                tvScreen.position.set(basePos.x-.14, basePos.y+2.7, basePos.z-.15);
+
+
+                var loader = new THREE.OBJLoader( );
+                loader.load( '/assets/tv.obj', function ( tv ) {
+                    tv.traverse( function ( child ) {
+                        if ( child instanceof THREE.Mesh ) {
+                            // Mark the mesh that is the TV
+                            console.log(child.name);
+                            objName = child.name;
+                            child.name = 'TV';
+                            var standardMaterial;
+                            var matColor;
+
+                            if (objName.startsWith('TV')) {
+                                tvMesh = child;
+                                matColor = 0x222222;
+                            } else if (objName.startsWith('speaker') || objName.startsWith('screen')) {
+                                matColor = 0x222222;
+                            } else if (objName.startsWith('ant') || objName.startsWith('knob')) {
+                                matColor = 0x999999;
+                            }
+                            
+                            standardMaterial = new THREE.MeshStandardMaterial( { color: matColor } );
+                            // child.geometry.center();
+                            child.material = standardMaterial;
+                            child.receiveShadow = true;
+                            child.castShadow = true;
+                        }
+                    } );
+                    tv.scale.set(0.5,0.5,0.5);
+                    tv.position.set(basePos.x-0.35, basePos.y+1.87, basePos.z);
+                    tv.rotation.y = angleRad;
+                    tv.castShadow = true;
+                    scene.add( tv );
+                    // var box = new THREE.Box3().setFromObject( tv );
+                    // console.log(box.getSize() );
+                } );
+            };
 
             // Add ambient and point lighting to the scene
             function addLights (scene) {
