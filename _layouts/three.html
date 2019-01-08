@@ -27,6 +27,8 @@
 
             var tvMesh;
             const FOV = 60;
+            const tvMaterial = new THREE.MeshStandardMaterial( { color: 0x222222 } );
+            const antennaMaterial = new THREE.MeshStandardMaterial( { color: 0x999999 } );
 
             // Setup scene and camera
 			var scene = new THREE.Scene();
@@ -115,35 +117,26 @@
             
             function addTV (angle, scene) {
 
-                const angleRad = angle*(Math.PI/180);
-                var axis = new THREE.Vector3( 0, 1, 0 );
-
                 // Create geometry
                 var pedGeometry = new THREE.BoxGeometry( 1, 2, 1 );
                 var screenGeometry = new THREE.BoxGeometry( .9, .9, 1, 1 );
 
                 // Mesh is what shaders interact with
-                var material = new THREE.MeshStandardMaterial( { color: 0xffffff } );
-                var pedestal = new THREE.Mesh( pedGeometry, material );
-                pedestal.castShadow = true;
-                pedestal.receiveShadow = true;
-                scene.add( pedestal );
-                pedestal.position.set(0, 1, -3);
-                pedestal.position.applyAxisAngle(axis, angleRad);
-                pedestal.rotation.y = angleRad;
+                
 
                 // Making video texture
                 video = document.getElementById( 'video' );
                 texture = new THREE.VideoTexture( video );
                 const parameters = { color: 0xffffff, map: texture };
 
+                // Create materials
                 var screenMaterial = new THREE.MeshBasicMaterial(parameters);
+                var material = new THREE.MeshStandardMaterial( { color: 0xffffff } );
+
                 var tvScreen = new THREE.Mesh( screenGeometry, screenMaterial );
-                tvScreen.castShadow = true;
-                tvScreen.rotation.y = -.1 + angleRad;
-                scene.add( tvScreen );
-                tvScreen.position.set(-.14, 2.7, -3.15);
-                tvScreen.position.applyAxisAngle(axis, angleRad);
+                var pedestal = new THREE.Mesh( pedGeometry, material );
+
+                
 
                 var loader = new THREE.OBJLoader( );
                 loader.load( '/assets/tv.obj', function ( tv ) {
@@ -152,35 +145,50 @@
                             // Mark the mesh that is the TV
                             objName = child.name;
                             child.name = 'TV';
-                            var standardMaterial;
-                            var matColor;
 
                             if (objName.startsWith('TV')) {
                                 tvMesh = child;
-                                matColor = 0x222222;
-                            } else if (objName.startsWith('speaker') || objName.startsWith('screen')) {
-                                matColor = 0x222222;
-                            } else if (objName.startsWith('ant') || objName.startsWith('knob')) {
-                                matColor = 0x999999;
+                            } 
+
+                            if (objName.startsWith('ant') || objName.startsWith('knob')) {
+                                child.material = antennaMaterial;
+                            } else {
+                                child.material = tvMaterial;
                             }
-                            
-                            standardMaterial = new THREE.MeshStandardMaterial( { color: matColor } );
-                            // child.geometry.center();
-                            child.material = standardMaterial;
                             child.receiveShadow = true;
                             child.castShadow = true;
                         }
                     } );
-                    tv.position.set(-0.35, 1.87, -3);
-                    tv.position.applyAxisAngle(axis, angleRad);
+
+                    placeObject(tv, -.35, 1.87, -3, angle);
+                    placeObject(tvScreen, -.14, 2.7, -3.15, angle, angle-5.7);
+                    placeObject(pedestal, 0, 1, -3, angle);
+
                     tv.scale.set(0.5,0.5,0.5);
-                    tv.rotation.y = angleRad;
                     tv.castShadow = true;
+                    tvScreen.castShadow = true;
+                    pedestal.castShadow = true;
+                    pedestal.receiveShadow = true;
+
+                    
+                    scene.add( pedestal );
+                    scene.add( tvScreen );
                     scene.add( tv );
-                    // var box = new THREE.Box3().setFromObject( tv );
-                    // console.log(box.getSize() );
                 } );
             };
+
+            function placeObject(obj, x, y, z, angle, rotAngle=null) {
+                const rotAxis = new THREE.Vector3( 0, 1, 0 );
+                const angleRad = angle*(Math.PI/180);
+                obj.position.set(x, y, z);
+                obj.position.applyAxisAngle(rotAxis, angleRad);
+                if (rotAngle != null) {
+                    obj.rotation.y = rotAngle*(Math.PI/180);
+                } else {
+                    obj.rotation.y = angleRad;
+                }
+                
+            }
 
             // Add ambient and point lighting to the scene
             function addLights (scene) {
