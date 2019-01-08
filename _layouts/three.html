@@ -25,35 +25,26 @@
         <script src="/assets/js/OutlinePass.js"></script>
 		<script>
 
+            var tvMesh;
             const FOV = 60;
             // Setup scene and camera
 			var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera( FOV, window.innerWidth/window.innerHeight, 0.1, 1000 );
             var clock = new THREE.Clock();
-
-            // Keeps track of TV mesh for outlines
-            var tvMesh;
-
-
-            // Setup renderer and add to window
-			var renderer = new THREE.WebGLRenderer();
+            var renderer = new THREE.WebGLRenderer();
             renderer.setSize( window.innerWidth, window.innerHeight );
             renderer.shadowMap.enabled = true;
             document.body.appendChild( renderer.domElement );
+
+            addLights(scene);
+
+            // Keeps track of TV mesh for outlines
+
+
+            // Setup renderer and add to window
+
             
-            const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
-            const pointLight = new THREE.PointLight(0xffffff,.3);
-            pointLight.castShadow = true;
-
-            pointLight.position.x = 2;
-            pointLight.position.y = 20;
-            pointLight.position.z = 2; 
-
-            // pointLight.shadow.mapSize.x = 1024;
-            // pointLight.shadow.mapSize.y = 1024;
-
-            scene.add(pointLight);
-            scene.add(ambientLight);
+            
 
             // var helper = new THREE.CameraHelper( pointLight.shadow.camera );
             // scene.add( helper );
@@ -61,7 +52,7 @@
 
             // Create geometry
             var pedGeometry = new THREE.BoxGeometry( 1, 2, 1 );
-            var TVGeometry = new THREE.BoxGeometry( .8, .8, 1, 1 );
+            var TVGeometry = new THREE.BoxGeometry( .9, .9, 1, 1 );
 
             // Mesh is what shaders interact with
 			var material = new THREE.MeshStandardMaterial( { color: 0xffffff } );
@@ -79,9 +70,9 @@
             var TVMaterial = new THREE.MeshBasicMaterial(parameters);
             var tvScreen = new THREE.Mesh( TVGeometry, TVMaterial );
             tvScreen.castShadow = true;
-            tvScreen.rotation.y = -.087;
+            tvScreen.rotation.y = -.1;
 			scene.add( tvScreen );
-            tvScreen.position.set(-.18, 2.8, -2.95);
+            tvScreen.position.set(-.14, 2.7, -3.15);
 
 
             var controls = new THREE.DragControls( camera, renderer.domElement, FOV );
@@ -191,6 +182,20 @@
             window.addEventListener( 'mousedown', onMouseDown );
             window.addEventListener( 'click', onMouseClick );
             window.addEventListener( 'touchmove', onTouchMove );
+
+            // Add ambient and point lighting to the scene
+            function addLights (scene) {
+                const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
+                const pointLight = new THREE.PointLight(0xffffff,.3);
+                pointLight.castShadow = true;
+
+                pointLight.position.x = 2;
+                pointLight.position.y = 20;
+                pointLight.position.z = 2; 
+
+                scene.add(pointLight);
+                scene.add(ambientLight);
+            }
 
             var hasMoved = false;
             function onMouseDown(event ) {
