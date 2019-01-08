@@ -8,11 +8,21 @@
 		</style>
 	</head>
 	<body>
-        <video id="video" autoplay loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
+        <video id="video1" autoplay loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
                 <source src="/assets/big_buck_bunny.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
         </video>
-        <a href="/projects/balloon" style="display:none" id="balloon"></a>
-        <div id="balloon-info">THE BALLOON</div>
+        <video id="video2" autoplay loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
+            <source src="/assets/big_buck_bunny.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        </video>
+        <video id="video3" autoplay loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
+            <source src="/assets/big_buck_bunny.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+        </video>
+        <a href="/projects/balloon" style="display:none" id="video1-link"></a>
+        <a href="/projects/balloon" style="display:none" id="video2-link"></a>
+        <a href="/projects/balloon" style="display:none" id="video3-link"></a>
+        <div class="video-info" id="video1-info">THE BALLOON</div>
+        <div class="video-info" id="video2-info">THE BALLOON</div>
+        <div class="video-info" id="video3-info">THE BALLOON</div>
         <script src="/assets/js/three.js"></script>
         <script src="/assets/js/controls/DragControls.js"></script>
         <script src="/assets/js/OBJLoader.js"></script>
@@ -25,10 +35,15 @@
         <script src="/assets/js/OutlinePass.js"></script>
 		<script>
 
-            var tvMesh;
+            var highlightMeshes = {};
             const FOV = 60;
             const tvMaterial = new THREE.MeshStandardMaterial( { color: 0x222222 } );
             const antennaMaterial = new THREE.MeshStandardMaterial( { color: 0x999999 } );
+            var raycaster = new THREE.Raycaster();
+			var mouse = new THREE.Vector2();
+            var selectedObjects = [];
+            var composer;
+            var outlinePass;
 
             // Setup scene and camera
 			var scene = new THREE.Scene();
@@ -55,12 +70,6 @@
             var copyPass = new THREE.ShaderPass( THREE.CopyShader );
             copyPass.renderToScreen = true;
             composer.addPass( copyPass );
-
-            var raycaster = new THREE.Raycaster();
-			var mouse = new THREE.Vector2();
-            var selectedObjects = [];
-            var composer;
-            var outlinePass;
 
             window.addEventListener( 'mousemove', onTouchMove );
             window.addEventListener( 'mousedown', onMouseDown );
@@ -105,17 +114,17 @@
             cylinder.material.roughness = 1;
             scene.add( cylinder );
 
-            addTV(0, scene);
-            addTV(120, scene);
-            addTV(240, scene);
+            addTV(0, scene, 'video1');
+            addTV(120, scene, 'video2');
+            addTV(240, scene, 'video3');
 
                
 
 
 
 
-            
-            function addTV (angle, scene) {
+            // Adds a TV object and pedestal
+            function addTV (angle, scene, elemId) {
 
                 // Create geometry
                 var pedGeometry = new THREE.BoxGeometry( 1, 2, 1 );
@@ -125,7 +134,7 @@
                 
 
                 // Making video texture
-                video = document.getElementById( 'video' );
+                video = document.getElementById( elemId );
                 texture = new THREE.VideoTexture( video );
                 const parameters = { color: 0xffffff, map: texture };
 
@@ -143,11 +152,12 @@
                     tv.traverse( function ( child ) {
                         if ( child instanceof THREE.Mesh ) {
                             // Mark the mesh that is the TV
-                            objName = child.name;
+                            sobjName = child.name;
                             child.name = 'TV';
+                            child._id = elemId;
 
                             if (objName.startsWith('TV')) {
-                                tvMesh = child;
+                                highlightMeshes[elemId].mesh = child;
                             } 
 
                             if (objName.startsWith('ant') || objName.startsWith('knob')) {
@@ -245,16 +255,14 @@
                 if ( intersects.length > 0 ) {
                     var selectedObject = intersects[ 0 ].object;
                     if (selectedObject.name == "TV") {
-                        renderer.domElement.setAttribute('style', 'cursor: pointer;' )
-                        console.log(tvMesh);
-                        addSelectedObject( tvMesh );
-                        outlinePass.selectedObjects = selectedObjects;
+                        renderer.domElement.setAttribute('style', 'cursor: pointer' )
+                        outlinePass.selectedObjects = [highlightMeshes[selectedObject._id].mesh];
                         console.log(outlinePass.selectedObjects);
-                        document.getElementById( 'balloon-info' ).style.visibility = 'visible';
+                        // document.getElementById( 'balloon-info' ).style.visibility = 'visible';
                         return true;
                     } else {
                         outlinePass.selectedObjects = [];
-                        document.getElementById( 'balloon-info' ).style.visibility = 'hidden';
+                        // document.getElementById( 'balloon-info' ).style.visibility = 'hidden';
                     }
                 } else {
                     return false;
