@@ -39,6 +39,8 @@ var highlightMeshes = {};
             renderer.domElement.addEventListener( 'mousemove', onTouchMove );
             renderer.domElement.addEventListener( 'mousedown', onMouseDown );
             renderer.domElement.addEventListener( 'mouseup', onMouseUp );
+            renderer.domElement.addEventListener( 'touchstart', onMouseDown );
+            renderer.domElement.addEventListener( 'touchend', onMouseUp );
             renderer.domElement.addEventListener( 'touchmove', onTouchMove );
             
             var controls = new THREE.DragControls( camera, renderer.domElement, FOV, viewX );
@@ -178,6 +180,10 @@ var highlightMeshes = {};
             function onMouseDown(event ) {
                 event.preventDefault();
                 event.stopPropagation();
+                if (event.changedTouches) {
+                    controls.mouseX = event.changedTouches[ 0 ].pageX;
+                    controls.update();
+                }
                 hasMoved = false;
                 controls.mouseDragOn = true;
             }
@@ -198,15 +204,18 @@ var highlightMeshes = {};
                 var x, y;
                 if ( event.changedTouches ) {
                     x = event.changedTouches[ 0 ].pageX;
+                    controls.mouseX = event.changedTouches[ 0 ].pageX;
+                    console.log(controls.mouseX);
                     y = event.changedTouches[ 0 ].pageY;
                 } else {
                     x = event.clientX;
                     y = event.clientY;
+                    controls.mouseX = event.pageX;
                 }
                 mouse.x = ( x / window.innerWidth ) * 2 - 1;
                 mouse.y = - ( y / window.innerHeight ) * 2 + 1;
 
-                controls.mouseX = event.pageX;
+                
                 checkIntersection();
             }
 
