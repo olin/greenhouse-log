@@ -2,6 +2,17 @@ var highlightMeshes = {};
             const FOV = 60;
             const tvMaterial = new THREE.MeshStandardMaterial( { color: 0x222222 } );
             const antennaMaterial = new THREE.MeshStandardMaterial( { color: 0x999999 } );
+            var manager = new THREE.LoadingManager();
+            manager.onLoad = function () {
+                console.log('Loaded.')
+                var loadElem = document.getElementById("cover-button");
+                console.log(loadElem);
+                console.log(loadElem.value)
+                loadElem.value = "enter";
+                console.log(loadElem.value)
+                loadElem.style.cursor = "grab";
+                loadElem.onclick = function() { startScene(); }
+            };
             var raycaster = new THREE.Raycaster();
             var mouse = new THREE.Vector2();
             var viewX = 0;
@@ -49,7 +60,7 @@ var highlightMeshes = {};
             controls.lon = -90;
             controls.lat = -10;
 
-            var woodTexture = new THREE.TextureLoader().load( "/assets/WoodTexture.png" );
+            var woodTexture = new THREE.TextureLoader( manager ).load( "/assets/WoodTexture.png" );
             woodTexture.wrapS = THREE.RepeatWrapping;
             woodTexture.wrapT = THREE.RepeatWrapping;
             woodTexture.repeat.set( 20, 20 );
@@ -65,7 +76,7 @@ var highlightMeshes = {};
             floor.receiveShadow = true;
             scene.add( floor ); 
 
-            var wallTexture = new THREE.TextureLoader().load( "/assets/WallTexture.jpg" );
+            var wallTexture = new THREE.TextureLoader( manager ).load( "/assets/WallTexture.jpg" );
             wallTexture.wrapS = THREE.RepeatWrapping;
             wallTexture.wrapT = THREE.RepeatWrapping;
             wallTexture.repeat.set( 200, 200 );
@@ -109,7 +120,7 @@ var highlightMeshes = {};
 
                 
 
-                var loader = new THREE.OBJLoader( );
+                var loader = new THREE.OBJLoader( manager );
                 loader.load( '/assets/tv.obj', function ( tv ) {
                     tv.traverse( function ( child ) {
                         if ( child instanceof THREE.Mesh ) {

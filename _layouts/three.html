@@ -1,6 +1,7 @@
 <html>
 	<head>
         <link rel="stylesheet" href="/assets/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
 		<title>Greenhouse 3D</title>
 		<style>
 			body { margin: 0; }
@@ -9,7 +10,11 @@
 	</head>
 	<body>
         <div class="splash-container" id="cover-screen" >
-            <button class="splash-button" id="cover-button" onclick="startScene()">Enter</button>
+            <div class="splash-elements">
+                <div class="info-card">welcome to The Greenhouse</div>
+                <input type="button" value="loading..." class="splash-button info-card" id="cover-button"></input>
+                <!-- <button class="splash-button info-card" id="cover-button" onclick="startScene()">loading...</button> -->
+            </div>
         </div>
         <video id="video1" autoplay loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
                 <source src="/assets/balloon-video.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
@@ -23,9 +28,9 @@
         <a href="/projects/balloon" style="display:none" id="video1-link"></a>
         <a href="/projects/alumni" style="display:none" id="video2-link"></a>
         <a href="/" style="display:none" id="video3-link"></a>
-        <div class="video-info" id="video1-info">THE BALLOON</div>
-        <div class="video-info" id="video2-info">WGBH ALUMNI WEEKEND</div>
-        <div class="video-info" id="video3-info">HOME</div>
+        <div class="video-info info-card" id="video1-info">the balloon</div>
+        <div class="video-info info-card" id="video2-info">WGBH alumni weekend</div>
+        <div class="video-info info-card" id="video3-info">home</div>
         <script src="/assets/js/three.js"></script>
         <script src="/assets/js/controls/DragControls.js"></script>
         <script src="/assets/js/OBJLoader.js"></script>
