@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="{{ page.lang | default: site.lang | default: "en" }}">
+<link rel="stylesheet" href="/assets/splash.css">
+
+{%- include head.html -%}
+    <body>
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+            <div class="splash">
+                <div class="title-box">
+                        <h1 class="post-title p-name large" itemprop="name headline">{{ page.title | escape }}</h1>
+                </div>
+                <div class="animation-container">
+                        {% for i in (1..8) %}
+                            <div class={{"rotating-wrapper-" | append: i}}>
+                                <img src={{"/assets/page" | append: i | append: ".png"}} class="rotating-image">
+                            </div>
+                            
+                        {% endfor %}
+                </div>
+                <div id="hint">
+                    <a href="#content">
+                        <i><p>Read more</p></i>
+                    </a>
+                </div>
+
+            </div>
+            </div>
+
+        <div class="wrapper splash-wrapper">
+            
+            <div class="post-content e-content" itemprop="articleBody" id="content" aria-label="Content">
+                <h3 class="p-name" style="text-align: center" itemprop="name headline">{{ page.summary | escape }}</h3>
+                <p class="post-meta">
+                        <time class="dt-published" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+                            {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+                        </time>
+                        {%- if page.author -%}
+                            • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span class="p-author h-card" itemprop="name">{{ page.author }}</span></span>
+                        {%- endif -%}
+                </p>
+                {{ content }}
+            </div>
+        </div>
+
+        {%- if site.disqus.shortname -%}
+            {%- include disqus_comments.html -%}
+        {%- endif -%}
+
+        <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
+        </article>
+    </body>
+
+</html>
