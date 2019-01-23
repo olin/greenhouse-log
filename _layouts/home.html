@@ -12,8 +12,7 @@
   <div id="wall">
     {% assign sortedLinks = site.data.whiteboard | sort: 'date' %}
     <div id="whiteboard">
-      <iframe id="whiteboard" width=640 height=480 src="http://localhost:8080"></iframe>
-      <!-- <img id="whiteboard" src="{{sortedLinks.last.src}}"/> -->
+      <img id="whiteboard" src="{{sortedLinks.last.src}}"/>
       <i>
         <p>Curious about what we're up to?</p>
         <p>Our whiteboard is captured periodically and updated here.</p>
