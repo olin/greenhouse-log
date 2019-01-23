@@ -4,13 +4,9 @@ var highlightMeshes = {};
             const antennaMaterial = new THREE.MeshStandardMaterial( { color: 0x999999 } );
             var manager = new THREE.LoadingManager();
             manager.onLoad = function () {
-                console.log('Loaded.')
                 var loadElem = document.getElementById("cover-button");
-                console.log(loadElem);
-                console.log(loadElem.value)
                 loadElem.value = "enter";
-                console.log(loadElem.value)
-                loadElem.style.cursor = "grab";
+                loadElem.style.cursor = "pointer";
                 loadElem.onclick = function() { startScene(); }
             };
             var raycaster = new THREE.Raycaster();

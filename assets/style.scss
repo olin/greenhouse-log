@@ -1,24 +1,5 @@
 ---
 ---
-.splash-elements {
-    grid-row: 2;
-    grid-column: 2;
-    // width: 200px;
-    // height: 50px;
-    align-self: center;
-    justify-self: center;
-    text-align: center;
-    color: #333333;
-}
-
-.splash-button {
-    background-color: transparent;
-    border: none;
-    outline: none;
-    -webkit-animation: flash linear 2s infinite;
-    animation: flash linear 2s infinite;
-}
-
 @-webkit-keyframes flash {
     0% { opacity: 1; } 
     50% { opacity: .1; } 
@@ -36,8 +17,31 @@
     position: absolute;
     background-color: #fefefe;
     display: grid;
-    grid-template-rows: 40% 20% 40%;
+    grid-template-rows: 10% 40% 10% 40%;
     grid-template-columns: 20% 60% 20%;
+    align-self: center;
+    justify-self: center;
+    text-align: center;
+    color: #333333;
+    .gh-logo {
+        grid-column: 2;
+        grid-row: 2;
+        height: 350px;
+        display: block;
+        margin: auto;
+    }
+
+    .splash-button {
+        grid-column: 2;
+        grid-row: 3;
+        clear: both;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        -webkit-animation: flash linear 2s infinite;
+        animation: flash linear 2s infinite;
+    }
+
 }
 
 .video-info {
