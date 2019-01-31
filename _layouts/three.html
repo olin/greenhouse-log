@@ -24,7 +24,7 @@
             <source src="/assets/alumni-video.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
         </video>
         <video id="video3" autoplay loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
-            <source src="/assets/big_buck_bunny.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+            <source src="/assets/greenhouse-intro.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
         </video>
         <a href="/projects/balloon" style="display:none" id="video1-link"></a>
         <a href="/projects/alumni" style="display:none" id="video2-link"></a>
@@ -32,17 +32,7 @@
         <div class="video-info info-card" id="video1-info">the balloon</div>
         <div class="video-info info-card" id="video2-info">WGBH alumni weekend</div>
         <div class="video-info info-card" id="video3-info">home</div>
-        <script src="/assets/js/three.js"></script>
-        <script src="/assets/js/controls/DragControls.js"></script>
-        <script src="/assets/js/OBJLoader.js"></script>
-        <script src="/assets/js/MTLLoader.js"></script>
-
-        <script src="/assets/js/CopyShader.js"></script>
-        <script src="/assets/js/EffectComposer.js"></script>
-        <script src="/assets/js/RenderPass.js"></script>
-        <script src="/assets/js/ShaderPass.js"></script>
-        <script src="/assets/js/OutlinePass.js"></script>
-        <script src="/assets/js/homepage.js"></script>
+        {% include three_scripts.html %}
         <script>
             function startScene (event) {
                 document.getElementById('cover-screen').style.visibility = 'hidden';
@@ -50,6 +40,7 @@
                 var videos = document.getElementsByTagName('video');
                 var i = 0;
                 for (i = 0; i < videos.length; i++) {
+                    videos[i].setAttribute('crossorigin', 'anonymous');
                     videos[i].play();
                 }
             }
