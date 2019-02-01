@@ -1,0 +1,12 @@
+- 
+  title: "the balloon"
+  src: "/assets/balloon-video.mp4"
+  href: "/projects/balloon"
+- 
+  title: "WGBH alumni weekend"
+  src: "/assets/alumni-video.mp4"
+  href: "/projects/alumni"
+-
+  title: "home"
+  src: "/assets/greenhouse-intro.mp4"
+  href: "/"

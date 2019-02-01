@@ -17,7 +17,14 @@
                 <!-- <button class="splash-button info-card" id="cover-button" onclick="startScene()">loading...</button> -->
             <!-- </div> -->
         </div>
-        <video id="video1" loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
+        {% for video in site.data.videos %}
+            <video id="video{{ forloop.index }}" loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
+                <source src="/assets/balloon-video.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
+            </video>
+            <a href={{ video.href }} style="display:none" id="video{{ forloop.index }}-link"></a>
+            <div class="video-info info-card" id="video{{ forloop.index }}-link">{{video.title}}</div>
+        {% endfor %}
+        <!-- <video id="video1" loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
             <source src="/assets/balloon-video.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
         </video>
         <video id="video2" loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
@@ -25,13 +32,13 @@
         </video>
         <video id="video3" loop muted crossOrigin="anonymous" webkit-playsinline style="display:none">
             <source src="/assets/greenhouse-intro.mp4" type='video/mp4; codecs="avc1.42E01E, mp4a.40.2"'>
-        </video>
-        <a href="/projects/balloon" style="display:none" id="video1-link"></a>
+        </video> -->
+        <!-- <a href="/projects/balloon" style="display:none" id="video1-link"></a>
         <a href="/projects/alumni" style="display:none" id="video2-link"></a>
-        <!-- <a href="/" style="display:none" id="video3-link"></a> -->
+        <a href="/" style="display:none" id="video3-link"></a>
         <div class="video-info info-card" id="video1-info">the balloon</div>
         <div class="video-info info-card" id="video2-info">WGBH alumni weekend</div>
-        <div class="video-info info-card" id="video3-info">home</div>
+        <div class="video-info info-card" id="video3-info">home</div> -->
         {% include three_scripts.html %}
         <script>
             function startScene (event) {
@@ -41,7 +48,6 @@
                 var i = 0;
                 for (i = 0; i < videos.length; i++) {
                     video = videos[i];
-                    // video.load(); // must call after setting/changing source
                     video.play();
                 }
             }
