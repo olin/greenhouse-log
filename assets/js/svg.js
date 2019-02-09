@@ -151,7 +151,7 @@ function getTangentPoints(shape, adjShapes) {
 }
 
 var movablePoints = getTangentPoints(hPath, shapes);
-
+var counter = 0;
 project.view.onMouseMove = function(e) {
     if (isMouseDown) {
         var pointDiff = Object.assign({}, e.point-prevPoint)
@@ -168,21 +168,42 @@ project.view.onMouseMove = function(e) {
             for (j=0; j < movablePoints[curShape].length; j++) {
                 var curIndex = movablePoints[curShape][j];
                 curShape.segments[curIndex].point = curShape.segments[curIndex].point + diff;
-                console.log(curShape.segments[curIndex].handleIn)
+                // console.log(curShape.segments[curIndex].handleIn)
             }
 
             var k;
             for (k=0; k < handlesIn[curShape].length; k++) {
                 var indexIn = handlesIn[curShape][k];
                 var indexOut = handlesOut[curShape][k];
+                // curShape.segments[indexIn].handleIn = curShape.segments[indexIn].handleIn + new Point(pointDiff.x, Math.sin(counter/10)*30);
+                // curShape.segments[indexOut].handleOut = curShape.segments[indexOut].handleOut + new Point(pointDiff.x, Math.sin(counter/10)*30);
                 curShape.segments[indexIn].handleIn = curShape.segments[indexIn].handleIn + new Point(pointDiff.x, yDiff);
                 curShape.segments[indexOut].handleOut = curShape.segments[indexOut].handleOut + new Point(pointDiff.x, yDiff);
+
             }
         }
+        // counter++;
         // movablePoints[0].point = movablePoints[0].point + diff;
         // movablePoints[1].point = movablePoints[1].point + diff;
         hPath.translate(diff);
     }
     prevPoint = e.point;
+}
+
+function onFrame(event) {
+    if (isMouseDown) {
+        var i;
+        for (i=0; i < shapes.length; i++) {
+            var curShape = shapes[i];
+            var k;
+            for (k=0; k < handlesIn[curShape].length; k++) {
+                var indexIn = handlesIn[curShape][k];
+                var indexOut = handlesOut[curShape][k];
+                curShape.segments[indexIn].handleIn.y += Math.sin(counter/5)*(curShape.segments[indexIn].handleIn.x/10);
+                curShape.segments[indexOut].handleOut.y += Math.sin(counter/5)*(curShape.segments[indexIn].handleIn.x/10);
+            }
+        }
+        counter++;
+    }
 }
 
