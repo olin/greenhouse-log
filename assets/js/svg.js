@@ -5,6 +5,10 @@ var xPos = 0;
 var yPos = 0;
 var shapes = [];
 
+// Keep track of handles to control
+var handlesIn = [];
+var handlesOut = [];
+
 
 var prevMouse = new Point(0,0);
 var isMouseDown = false;
@@ -57,6 +61,25 @@ project.view.onMouseUp = function(e) {
                 duration: 250
             })
         }
+
+        var k;
+        for (k=0; k < handlesIn[curShape].length; k++) {
+            var indexIn = handlesIn[curShape][k];
+            var indexOut = handlesOut[curShape][k];
+            var handleInX = 'segments[' + String(indexIn) + '].handleIn.x';
+            var handleInY = 'segments[' + String(indexIn) + '].handleIn.y';
+            var handleOutX = 'segments[' + String(indexOut) + '].handleOut.x';
+            var handleOutY = 'segments[' + String(indexOut) + '].handleOut.y';
+            var to = {};
+            to[handleInX] = 0;
+            to[handleInY] = 0;
+            to[handleOutX] = 0;
+            to[handleOutY] = 0;
+            curShape.tween(to, {
+                easing: 'easeInOutCubic',
+                duration: 250
+            })
+        }
     }
     xPos = 0;
     yPos = 0;
@@ -69,7 +92,6 @@ function getTangentPoints(shape, adjShapes) {
     for (i=0; i < adjShapes.length; i++) {
         var j;
         var curShape = adjShapes[i];
-        curShape.reduce();
         for (j=0; j < curShape.segments.length; j++) {
             var curPoint = curShape.segments[j];
             var k;
@@ -83,6 +105,8 @@ function getTangentPoints(shape, adjShapes) {
                         movablePoints[curShape].push(j);
                     } else {
                         movablePoints[curShape] = [j];
+                        handlesIn[curShape] = [];
+                        handlesOut[curShape] = []; 
                     }
                     
                 }
@@ -90,18 +114,39 @@ function getTangentPoints(shape, adjShapes) {
         }
         var points = movablePoints[curShape];
         // Insert new points
+        var handleOffset = new Point(50, 50/Math.sqrt(3))
+        var newFirstPoint = new Point(curShape.segments[points[0]].point.x, curShape.segments[points[0]].point.y);
+        var newFirstHandle = newFirstPoint + handleOffset;
+        var newFirstSeg = new Segment(newFirstPoint, null, new Point(0,0));
+
+        var newSecondPoint = new Point(curShape.segments[points[1]].point.x, curShape.segments[points[1]].point.y);
+        var newSecondHandle = newSecondPoint + handleOffset;
+        var newSecondSeg = new Segment(newSecondPoint, null, new Point(0,0));
+
         if (points[1]-points[0] == 1) { // Moving points are adjacent
-            curShape.insertSegments(points[0], [new Point(curShape.segments[points[0]].point.x, curShape.segments[points[0]].point.y)]);
-            curShape.insertSegments(points[1]+2, [new Point(curShape.segments[points[1]+1].point.x, curShape.segments[points[1]+1].point.y)]);
+            handlesOut.push(new Point(0,0));
+            curShape.insertSegments(points[0], [new Segment(newFirstPoint, null, handlesOut[handlesOut.length-1])]);
+            console.log(points[0])
+            curShape.insertSegments(points[1]+2, [newSecondSeg]);
             points[0]++;
             points[1]++;
+            handlesOut[curShape].push(points[0]-1);
+            handlesIn[curShape].push(points[1]+1);
         } else { // Moving points aren't adjacent
-            curShape.insertSegments(points[0]+1, [new Point(curShape.segments[points[0]].point.x, curShape.segments[points[0]].point.y)]);
-            curShape.insertSegments(points[1]+1, [new Point(curShape.segments[points[1]+1].point.x, curShape.segments[points[1]+1].point.y)]);
+            curShape.insertSegments(points[0]+1, [newFirstSeg]);
+            curShape.insertSegments(points[1]+1, [newSecondSeg]);
             points[1]+= 2;
+            handlesIn[curShape].push(points[0]+1);
+            handlesOut[curShape].push(points[1]-1);
         }
         // console.log(curShape.segments);
+        // curShape.fullySelected = true;
+        console.log(curShape.segments[5]);
+        // curShape.segments[5].handleOut = new Point(50,50);
     }
+    handlesOut[0].x = 50;
+    
+
     return movablePoints;
 }
 
@@ -123,6 +168,15 @@ project.view.onMouseMove = function(e) {
             for (j=0; j < movablePoints[curShape].length; j++) {
                 var curIndex = movablePoints[curShape][j];
                 curShape.segments[curIndex].point = curShape.segments[curIndex].point + diff;
+                console.log(curShape.segments[curIndex].handleIn)
+            }
+
+            var k;
+            for (k=0; k < handlesIn[curShape].length; k++) {
+                var indexIn = handlesIn[curShape][k];
+                var indexOut = handlesOut[curShape][k];
+                curShape.segments[indexIn].handleIn = curShape.segments[indexIn].handleIn + new Point(pointDiff.x, yDiff);
+                curShape.segments[indexOut].handleOut = curShape.segments[indexOut].handleOut + new Point(pointDiff.x, yDiff);
             }
         }
         // movablePoints[0].point = movablePoints[0].point + diff;
