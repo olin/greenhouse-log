@@ -33,11 +33,13 @@ hPath.onMouseDown = function(e) {
 project.view.onMouseUp = function(e) {
     isMouseDown = false;
     prevPoint = e.point;
-    console.log(xPos);
     hPath.tween({
-        'position.x': hPath.position.x - xPos,
-        'position.y': hPath.position.y - yPos
-    }, 200)
+        'position.x': ['-=', xPos],
+        'position.y': ['-=', yPos]
+    }, {
+        easing: 'easeInOutCubic',
+        duration: 250
+    })
     var i;
     for (i=0; i < shapes.length; i++) {
         var curShape = shapes[i];
@@ -45,13 +47,15 @@ project.view.onMouseUp = function(e) {
         for (j=0; j < movablePoints[curShape].length; j++) {
             var curIndex = movablePoints[curShape][j];
             var xString = 'segments[' + String(curIndex) + '].point.x';
-            console.log(xString)
             var yString = 'segments[' + String(curIndex) + '].point.y';
             var to = {};
             to[xString] = ['-=', xPos];
             to[yString] = ['-=', yPos];
             // console.log(curshape.segments)
-            curShape.tween(to, 200)
+            curShape.tween(to, {
+                easing: 'easeInOutCubic',
+                duration: 250
+            })
         }
     }
     xPos = 0;
@@ -65,6 +69,7 @@ function getTangentPoints(shape, adjShapes) {
     for (i=0; i < adjShapes.length; i++) {
         var j;
         var curShape = adjShapes[i];
+        curShape.reduce();
         for (j=0; j < curShape.segments.length; j++) {
             var curPoint = curShape.segments[j];
             var k;
@@ -73,6 +78,7 @@ function getTangentPoints(shape, adjShapes) {
                 var pointDist = curPoint.point.getDistance(comparePoint, true);
                 if (pointDist < 25) {
                     // Add the current index to the list of movable points
+                    
                     if (curShape in movablePoints) {
                         movablePoints[curShape].push(j);
                     } else {
@@ -82,6 +88,19 @@ function getTangentPoints(shape, adjShapes) {
                 }
             }
         }
+        var points = movablePoints[curShape];
+        // Insert new points
+        if (points[1]-points[0] == 1) { // Moving points are adjacent
+            curShape.insertSegments(points[0], [new Point(curShape.segments[points[0]].point.x, curShape.segments[points[0]].point.y)]);
+            curShape.insertSegments(points[1]+2, [new Point(curShape.segments[points[1]+1].point.x, curShape.segments[points[1]+1].point.y)]);
+            points[0]++;
+            points[1]++;
+        } else { // Moving points aren't adjacent
+            curShape.insertSegments(points[0]+1, [new Point(curShape.segments[points[0]].point.x, curShape.segments[points[0]].point.y)]);
+            curShape.insertSegments(points[1]+1, [new Point(curShape.segments[points[1]+1].point.x, curShape.segments[points[1]+1].point.y)]);
+            points[1]+= 2;
+        }
+        // console.log(curShape.segments);
     }
     return movablePoints;
 }
@@ -94,8 +113,9 @@ project.view.onMouseMove = function(e) {
         xPos += pointDiff.x;
         // Calculate 30deg height (driven by x-direction)
         var yDiff = (e.point-prevPoint).x/Math.sqrt(3);
-        yPos += yDiff;
-        var diff = new Point(pointDiff.x, yDiff);
+        // yPos += yDiff;
+        yPos += pointDiff.y;
+        var diff = new Point(pointDiff.x, pointDiff.y);
         var i;
         for (i=0; i < shapes.length; i++) {
             var curShape = shapes[i];
