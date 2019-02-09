@@ -38,11 +38,29 @@ project.view.onMouseUp = function(e) {
         'position.x': hPath.position.x - xPos,
         'position.y': hPath.position.y - yPos
     }, 200)
+    var i;
+    for (i=0; i < shapes.length; i++) {
+        var curShape = shapes[i];
+        var j;
+        for (j=0; j < movablePoints[curShape].length; j++) {
+            var curIndex = movablePoints[curShape][j];
+            var xString = 'segments[' + String(curIndex) + '].point.x';
+            console.log(xString)
+            var yString = 'segments[' + String(curIndex) + '].point.y';
+            var to = {};
+            to[xString] = ['-=', xPos];
+            to[yString] = ['-=', yPos];
+            // console.log(curshape.segments)
+            curShape.tween(to, 200)
+        }
+    }
+    xPos = 0;
+    yPos = 0;
 }
 
 
 function getTangentPoints(shape, adjShapes) {
-    var movablePoints = [];
+    var movablePoints = {};
     var i;
     for (i=0; i < adjShapes.length; i++) {
         var j;
@@ -54,7 +72,13 @@ function getTangentPoints(shape, adjShapes) {
                 var comparePoint = shape.segments[k].point;
                 var pointDist = curPoint.point.getDistance(comparePoint, true);
                 if (pointDist < 25) {
-                    movablePoints.push(curPoint);
+                    // Add the current index to the list of movable points
+                    if (curShape in movablePoints) {
+                        movablePoints[curShape].push(j);
+                    } else {
+                        movablePoints[curShape] = [j];
+                    }
+                    
                 }
             }
         }
@@ -67,16 +91,19 @@ var movablePoints = getTangentPoints(hPath, shapes);
 project.view.onMouseMove = function(e) {
     if (isMouseDown) {
         var pointDiff = Object.assign({}, e.point-prevPoint)
-        console.log(xPos);
         xPos += pointDiff.x;
-        
         // Calculate 30deg height (driven by x-direction)
         var yDiff = (e.point-prevPoint).x/Math.sqrt(3);
         yPos += yDiff;
         var diff = new Point(pointDiff.x, yDiff);
         var i;
-        for (i=0; i < movablePoints.length; i++) {
-            movablePoints[i].point = movablePoints[i].point + diff;
+        for (i=0; i < shapes.length; i++) {
+            var curShape = shapes[i];
+            var j;
+            for (j=0; j < movablePoints[curShape].length; j++) {
+                var curIndex = movablePoints[curShape][j];
+                curShape.segments[curIndex].point = curShape.segments[curIndex].point + diff;
+            }
         }
         // movablePoints[0].point = movablePoints[0].point + diff;
         // movablePoints[1].point = movablePoints[1].point + diff;
