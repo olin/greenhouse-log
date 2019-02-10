@@ -1,0 +1,15 @@
+# custom list for profiles
+- name: Jeff Goldenson
+  role: Director
+  image: /assets/jeffgoldenson.jpg
+- name: Matt Brucker
+  role: Student
+  website: https://mbrucker.com/
+  image: /assets/face.jpg
+- name: Evan New-Schmidt
+  role: Student
+  website: https://evan.new-schmidt.com/
+  image: /assets/new-schmidt_evan.jpg
+- name: You
+  role: Student
+  image: /assets/you.png

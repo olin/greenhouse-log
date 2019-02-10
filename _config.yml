@@ -30,24 +30,6 @@ collections:
 
 google_analytics: UA-129883476-1
 
-# custom list for profiles
-people:
-  - name: Jeff Goldenson
-    role: Director
-    image: jeffgoldenson.jpg
-  - name: Matt Brucker
-    role: Student
-    website: https://mbrucker.com/
-    image: face.jpg
-  - name: Evan New-Schmidt
-    role: Student
-    website: https://evan.new-schmidt.com/
-    image: new-schmidt_evan.jpg
-  - name: You
-    role: Student
-    image: you.png
-
-
 # Build settings
 markdown: kramdown
 theme: minima
