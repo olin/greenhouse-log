@@ -29,11 +29,14 @@ collections:
       - {label: "Date", name: "date", widget: "date"}
       - {label: "Summary", name: "summary", widget: "string"}
       - {label: "Body", name: "body", widget: "markdown"}
-  - label: "People"
-    name: people
-    file: "_data/people.yml"
-    fields:
-      - {label: Name, name: name, widget: string}
-      - {label: Role, name: role, widget: string}
-      - {label: Image, name: image, widget: image, default: "/assets/you.png"}
-      - {label: Website, name: website, widget: string, required: false}
+  - label: "Lists"
+    name: lists
+    files:
+      - label: People
+        name: people
+        file: "_data/people.yml"
+        fields:
+          - {label: Name, name: name, widget: string}
+          - {label: Role, name: role, widget: string}
+          - {label: Image, name: image, widget: image, default: "/assets/you.png"}
+          - {label: Website, name: website, widget: string, required: false}
