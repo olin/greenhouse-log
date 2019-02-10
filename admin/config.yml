@@ -7,6 +7,7 @@ backend:
   name: github
   repo: olin/greenhouse-log
   branch: netlify-cms
+  site_domain: https://vigilant-neumann-5f976d.netlify.com/
 
 collections:
   - name: posts
