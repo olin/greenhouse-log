@@ -1,9 +1,22 @@
 ---
 ---
 
+.oval {
+  background-color: #aaaaaa;
+  width: 170px;
+  height: 50px;
+  position: absolute;
+  left: 45.8vw;
+  top: 59vh;
+  border-radius: 50%;
+  filter: blur(10px);
+}
+
 #svgStretch {
   height: 100vh;
   width: 100%;
+  position: absolute;
+  top: 0;
 }
 
 #gh-logo {

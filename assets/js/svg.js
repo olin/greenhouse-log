@@ -11,7 +11,22 @@ var handlesOut = [];
 
 
 var prevMouse = new Point(0,0);
+var origin = new Point(0,0);
 var isMouseDown = false;
+
+var WAVE_SPEED = 17;
+var WAVE_AMPLITUDE = 10;
+
+var domElement = document.getElementById('svgStretch');
+
+// console.log(domElement.style.width)
+
+// console.log(project.activeLayer.bounds)
+// console.log(ghLogo.bounds)
+
+ghLogo.position = new Point(window.innerWidth/2, window.innerHeight/2)
+console.log(ghLogo.position);
+console.log(window.innerWidth);
 
 
 
@@ -27,15 +42,33 @@ for (i = 0; i < ghLogo.children.length; i++) {
         shapes.push(ghLogo.children[i]);
     } 
 }
-// console.log(project.activeLayer.children);
+
+hPath.onMouseEnter = function(e) {
+    console.log('enter')
+    if (!isMouseDown) {
+        domElement.style.cursor = 'grab';
+    }
+    
+}
+
+hPath.onMouseLeave = function(e) {
+    if (!isMouseDown) {
+        console.log('leave');
+        domElement.style.cursor = 'default';
+    }
+}
 
 hPath.onMouseDown = function(e) {
+    domElement.style.cursor = 'grabbing';
+    console.log(domElement.style.cursor);
     counter = 0;
     isMouseDown = true;
     prevPoint = e.point;
 }
 
 project.view.onMouseUp = function(e) {
+    console.log('exit')
+    domElement.style.cursor = 'default';
     isMouseDown = false;
     prevPoint = e.point;
     hPath.tween({
@@ -158,8 +191,7 @@ project.view.onMouseMove = function(e) {
         var pointDiff = Object.assign({}, e.point-prevPoint)
         xPos += pointDiff.x;
         // Calculate 30deg height (driven by x-direction)
-        var yDiff = (e.point-prevPoint).x/Math.sqrt(3);
-        // yPos += yDiff;
+        // var yDiff = (e.point-prevPoint).x/Math.sqrt(3);
         yPos += pointDiff.y;
         var diff = new Point(pointDiff.x, pointDiff.y);
         var i;
@@ -169,33 +201,16 @@ project.view.onMouseMove = function(e) {
             for (j=0; j < movablePoints[curShape].length; j++) {
                 var curIndex = movablePoints[curShape][j];
                 curShape.segments[curIndex].point = curShape.segments[curIndex].point + diff;
-                // console.log(curShape.segments[curIndex].handleIn)
-            }
-
-            var k;
-            for (k=0; k < handlesIn[curShape].length; k++) {
-                var indexIn = handlesIn[curShape][k];
-                var indexOut = handlesOut[curShape][k];
-                // curShape.segments[indexIn].handleIn = curShape.segments[indexIn].handleIn + new Point(pointDiff.x, Math.sin(counter/10)*30);
-                // curShape.segments[indexOut].handleOut = curShape.segments[indexOut].handleOut + new Point(pointDiff.x, Math.sin(counter/10)*30);
-                // curShape.segments[indexIn].handleIn.x += pointDiff.x*.5;
-                // curShape.segments[indexIn].handleIn.y += yDiff*.5;//curShape.segments[indexIn].handleIn + new Point(pointDiff.x, yDiff);
-                // curShape.segments[indexOut].handleOut.x += pointDiff.x*.5;
-                // curShape.segments[indexOut].handleOut.y += yDiff*.5;
             }
         }
-        // counter++;
-        // movablePoints[0].point = movablePoints[0].point + diff;
-        // movablePoints[1].point = movablePoints[1].point + diff;
         hPath.translate(diff);
     }
     prevPoint = e.point;
 }
 
-var origin = new Point(0,0);
 function onFrame(event) {
     if (isMouseDown) {
-        var offset = Math.sin(counter/17)*10;
+        var offset = Math.sin(counter/WAVE_SPEED)*WAVE_AMPLITUDE;
         var newPos = new Point(xPos, yPos).rotate(offset, origin)
         var i;
         for (i=0; i < shapes.length; i++) {
@@ -204,23 +219,8 @@ function onFrame(event) {
             for (k=0; k < handlesIn[curShape].length; k++) {
                 var indexIn = handlesIn[curShape][k];
                 var indexOut = handlesOut[curShape][k];
-                // console.log(curShape.segments[indexIn].handleIn)
-                // var distIn = curShape.segments[indexIn].handleIn.getDistance(origin);
-                // curShape.segments[indexIn].handleIn.y -= (curShape.segments[indexIn].handleIn.x*.05)*offset;
-                // curShape.segments[indexIn].handleIn.x += (curShape.segments[indexIn].handleIn.y*.05)*offset;
-
-                // curShape.segments[indexIn].handleIn.y = yPos;
-                // curShape.segments[indexIn].handleIn.x = xPos;
-
                 curShape.segments[indexIn].handleIn = newPos;
-                // var distOut = curShape.segments[indexOut].handleOut.getDistance(origin);
-                // curShape.segments[indexOut].handleOut.y -= (curShape.segments[indexOut].handleOut.x*.05)*offset;
-                // curShape.segments[indexOut].handleOut.x += (curShape.segments[indexOut].handleOut.y*.05)*offset;
-
                 curShape.segments[indexOut].handleOut = newPos;
-                // curShape.segments[indexOut].handleOut.x = xPos;
-
-                // curShape.segments[indexOut].handleOut.y += Math.sin(counter/5)*(curShape.segments[indexIn].handleIn.x/10);
             }
         }
         counter++;
